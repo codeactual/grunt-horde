@@ -1,0 +1,42 @@
+{
+  "name": "grunt-horde",
+  "description": "Organized grunt task configuration",
+  "version": "0.1.0",
+  "main": "index.js",
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "David Smith",
+      "web": "https://github.com/codeactual/"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/codeactual/grunt-horde/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeactual/grunt-horde.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "~1.6.0",
+    "component": "~0.16.0",
+    "apidox": "~0.3.1",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-shell": "~0.2.1",
+    "mocha": "~1.10.0",
+    "sinon": "~1.7.2",
+    "sinon-chai": "~2.4.0",
+    "sinon-doublist": "~0.4.1"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "gitemplate": {
+    "originSha": "3cc07b1e77",
+    "originUrl": "git.com:codeactual/gitemplate-node-lib.git"
+  }
+}
