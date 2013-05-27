@@ -5,8 +5,9 @@
   "version": "0.1.0",
   "keywords": [],
   "dependencies": {
-    "visionmedia/configurable.js": "f87ca5f",
-    "codeactual/extend": "0.1.0"
+    "codeactual/extend": "0.1.0",
+    "component/clone": "0.1.0",
+    "pluma/assimilate": "0.2.0"
   },
   "main": "lib/component/main.js",
   "scripts": [
