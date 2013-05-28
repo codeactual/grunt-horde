@@ -5,15 +5,18 @@ var fs = require('fs');
 var util = require('util');
 var sprintf = util.format;
 var grunt = require('grunt');
+var shelljs = require('shelljs');
 
 var should = chai.should();
 chai.Assertion.includeStack = true;
 chai.use(require('sinon-chai'));
 
 var gruntHorde = require('../../..');
+var GruntHorde = gruntHorde.GruntHorde;
 var fixtureDir = __dirname + '/../../fixture';
 
 require('sinon-doublist')(sinon, 'mocha');
+require('sinon-doublist-fs')('mocha');
 
 describe('GruntHorde', function() {
   'use strict';
@@ -21,8 +24,10 @@ describe('GruntHorde', function() {
   beforeEach(function() {
     this.horde = new gruntHorde.create();
 
+    this.config = {iAmA: 'fake config obj'};
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
+    this.modPath = '/path/to/nowhere';
     this.gruntStub = this.stub(grunt);
 
     this.horde.follow(grunt);
@@ -131,35 +136,72 @@ describe('GruntHorde', function() {
   });
 
   describe('#require', function() {
-    it.skip('should inject custom context', function() {
+    beforeEach(function() {
+      this.name = fixtureDir + '/debug-module/debug';
+      this.output = this.horde.require(this.name).debug;
     });
 
-    it.skip('should pass grunt as arg', function() {
+    it('should inject custom context', function() {
+      this.output.context.should.deep.equal(Object.keys(this.horde.createModuleContext()));
+    });
+
+    it('should pass grunt as arg', function() {
+      this.output.grunt.should.deep.equal(this.horde.grunt);
     });
   });
 
   describe('#requireIfExists', function() {
-    it.skip('should return loaded config if exists', function() {
+    it('should return loaded config if exists', function() {
+      this.stubFile(this.modPath).make();
+      var stub = this.stub(this.horde, 'require');
+      stub.withArgs(this.modPath).returns(this.config);
+      this.horde.requireIfExists(this.modPath).should.deep.equal(this.config);
     });
 
-    it.skip('should return empty config if absent', function() {
+    it('should return empty config if absent', function() {
+      this.horde.requireIfExists(this.modPath).should.deep.equal({});
     });
   });
 
 
   describe('#requireDir', function() {
-    it.skip('should reduce all top-level JS files', function() {
+    beforeEach(function() {
+      // Fake dir scan
+      this.files = ['index.js', 'jshint.js'];
+      this.lsStub = this.stub(shelljs, 'ls');
+      this.lsStub.withArgs(this.modPath + '/*.js').returns(this.files);
+
+      // Fake dir-to-config-obj conversion
+      this.reduceOut = {
+        index: {iKey1: 1, iKey2: 2},
+        categorized: {jshint: {jKey1: 3, jKey2: 4}}
+      };
+      this.merged = {iKey1: 1, iKey2: 2, jshint: {jKey1: 3, jKey2: 4}};
+      this.reduceFn = {iAmA: 'fake fn'};
+      this.reduceDirBindStub = this.stub(GruntHorde.reduceDirToConfig, 'bind');
+      this.reduceDirBindStub.withArgs(this.horde).returns(this.reduceFn);
+      this.reduceStub = this.stub(Array.prototype, 'reduce');
+      this.reduceStub.withArgs(this.reduceFn, sinon.match.object).returns(this.reduceOut);
+
+      // Use above stubs to verify expected steps
+      this.output = this.horde.requireDir(this.modPath);
     });
 
-    it.skip('should merge collected configs', function() {
+    it('should merge collected configs', function() {
+      this.output.should.deep.equal(this.merged);
     });
   });
 
   describe('#requireDirIfExists', function() {
-    it.skip('should return loaded config if exists', function() {
+    it('should return loaded config if exists', function() {
+      this.stubFile(this.modPath).readdir(['child']).make();
+      var stub = this.stub(this.horde, 'requireDir');
+      stub.withArgs(this.modPath).returns(this.config);
+      this.horde.requireDirIfExists(this.modPath).should.deep.equal(this.config);
     });
 
-    it.skip('should return empty config if absent', function() {
+    it('should return empty config if absent', function() {
+      this.horde.requireIfExists(this.modPath).should.deep.equal({});
     });
   });
 
