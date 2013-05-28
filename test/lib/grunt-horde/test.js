@@ -19,15 +19,18 @@ describe('GruntHorde', function() {
   'use strict';
 
   beforeEach(function() {
-    this.gruntStub = this.stub(grunt);
     this.horde = new gruntHorde.create();
+
+    this.cwd = process.cwd();
     this.home = '/path/to/proj';
+    this.gruntStub = this.stub(grunt);
+
+    this.horde.follow(grunt);
   });
 
   describe('#attack', function() {
     beforeEach(function() {
       this.horde
-        .follow(grunt)
         .loot(fixtureDir + '/base-config')
         .loot(fixtureDir + '/local-config');
     });
@@ -84,33 +87,46 @@ describe('GruntHorde', function() {
 
   describe('#follow', function() {
     it('should store grunt instance', function() {
-      should.equal(this.horde.grunt, null);
-      this.horde.follow(grunt);
-      this.horde.grunt.should.deep.equal(grunt);
+      var horde = new gruntHorde.create();
+      should.equal(horde.grunt, null);
+      horde.follow(grunt);
+      horde.grunt.should.deep.equal(grunt);
     });
   });
 
   describe('#home', function() {
     it('should store custom cwd', function() {
-      this.horde.cwd.should.equal(process.cwd());
+      this.horde.cwd.should.equal(this.cwd);
       this.horde.home(this.home);
       this.horde.cwd.should.equal(this.home);
     });
   });
 
   describe('#loot', function() {
-    it.skip('should merge in configs from dir', function() {
+    it('should merge in configs from dir', function() {
+      var name = './rel/path/to/config/dir';
+      var configObj = {a: 'one', b: 2, c: ['x', 'y']};
+
+      this.stub = this.stub(this.horde, 'dirToConfigObj');
+      this.stub.withArgs(name).returns(configObj);
+
+      this.horde.config = {a: 1, b: 'two', c: ['z']};
+      this.horde.loot(name);
+      this.horde.config.should.deep.equal({a: 'one', b: 2, c: ['x', 'y']});
     });
   });
 
-  describe('#resolveRequireName', function() {
-    it.skip('should detect relative path', function() {
+  describe('#resolveRequire', function() {
+    it('should detect relative path', function() {
+      this.horde.resolveRequire('./config/grunt').should.equal(this.cwd + '/config/grunt');
     });
 
-    it.skip('should detect installed module name', function() {
+    it('should detect installed module name', function() {
+      this.horde.resolveRequire('mod').should.equal(this.cwd + '/node_modules/mod');
     });
 
-    it.skip('should detect absolute path', function() {
+    it('should detect absolute path', function() {
+      this.horde.resolveRequire('/path/to/mod').should.equal('/path/to/mod');
     });
   });
 
