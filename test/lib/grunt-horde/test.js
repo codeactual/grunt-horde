@@ -19,44 +19,82 @@ describe('GruntHorde', function() {
   'use strict';
 
   beforeEach(function() {
-    this.horde = new gruntHorde.create();
     this.gruntStub = this.stub(grunt);
-    this.horde
-      .follow(grunt)
-      .loot(fixtureDir + '/base-config')
-      .loot(fixtureDir + '/local-config')
-      .attack();
+    this.horde = new gruntHorde.create();
+    this.home = '/path/to/proj';
   });
 
   describe('#attack', function() {
-    it.skip('should detect missing grunt instance', function() {
+    beforeEach(function() {
+      this.horde
+        .follow(grunt)
+        .loot(fixtureDir + '/base-config')
+        .loot(fixtureDir + '/local-config');
     });
 
-    it.skip('should init config', function() {
+    it('should detect missing grunt instance', function() {
+      (function() {
+        (new gruntHorde.create()).attack();
+      }).should.Throw(Error, 'grunt() value is missing');
     });
 
-    it.skip('should load tasks', function() {
-      // Use mix of tasks with 0/1 as values
+    it('should init config', function() {
+      var expected = {iAmA: 'fake init config'};
+      this.horde.config.initConfig = expected;
+      this.horde.attack();
+      this.gruntStub.initConfig.should.have.been.calledWithExactly(expected);
     });
 
-    it.skip('should load npm tasks', function() {
-      // Use mix of tasks with 0/1 as values
+    it('should load tasks', function() {
+      var expected = {t1: true, t2: false, t3: true, t4: false};
+      this.horde.config.loadTasks = expected;
+      this.horde.attack();
+      this.gruntStub.loadTasks.should.have.been.calledTwice;
+      this.gruntStub.loadTasks.should.have.been.calledWithExactly('t1');
+      this.gruntStub.loadTasks.should.have.been.calledWithExactly('t3');
     });
 
-    it.skip('should register tasks', function() {
+    it('should load npm tasks', function() {
+      var expected = {t1: true, t2: false, t3: true, t4: false};
+      this.horde.config.loadNpmTasks = expected;
+      this.horde.attack();
+      this.gruntStub.loadNpmTasks.should.have.been.calledTwice;
+      this.gruntStub.loadNpmTasks.should.have.been.calledWithExactly('t1');
+      this.gruntStub.loadNpmTasks.should.have.been.calledWithExactly('t3');
     });
 
-    it.skip('should register multi tasks', function() {
+    it('should register tasks', function() {
+      var expected = {t1: ['t1 arg1', 't1 arg2'], t2: ['t2 arg1', 't2 arg2']};
+      this.horde.config.registerTask = expected;
+      this.horde.attack();
+      this.gruntStub.registerTask.should.have.been.calledTwice;
+      this.gruntStub.registerTask.should.have.been.calledWithExactly('t1', 't1 arg1', 't1 arg2');
+      this.gruntStub.registerTask.should.have.been.calledWithExactly('t2', 't2 arg1', 't2 arg2');
+    });
+
+    it('should register multi tasks', function() {
+      var expected = {t1: ['t1 arg1', 't1 arg2'], t2: ['t2 arg1', 't2 arg2']};
+      this.horde.config.registerMultiTask = expected;
+      this.horde.attack();
+      this.gruntStub.registerMultiTask.should.have.been.calledTwice;
+      this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('t1', 't1 arg1', 't1 arg2');
+      this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('t2', 't2 arg1', 't2 arg2');
     });
   });
 
   describe('#follow', function() {
-    it.skip('should store grunt instance', function() {
+    it('should store grunt instance', function() {
+      should.equal(this.horde.grunt, null);
+      this.horde.follow(grunt);
+      this.horde.grunt.should.deep.equal(grunt);
     });
   });
 
   describe('#home', function() {
-    it.skip('should store custom cwd', function() {
+    it('should store custom cwd', function() {
+      this.horde.cwd.should.equal(process.cwd());
+      this.horde.home(this.home);
+      this.horde.cwd.should.equal(this.home);
     });
   });
 

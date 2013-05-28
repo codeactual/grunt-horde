@@ -6,7 +6,7 @@ module.exports = function(grunt) {
       command: 'component build --standalone <%= instanceName %> --name <%= projName %> --out dist'
     },
     test_lib: {
-      options: this.decree.mochaShelljsOpt,
+      options: this.config.mochaShelljsOpt,
       command: 'mocha --colors --recursive --reporter spec test/lib'
     },
     dox_lib: {
