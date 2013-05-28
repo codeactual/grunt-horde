@@ -206,20 +206,41 @@ describe('GruntHorde', function() {
   });
 
   describe('#createModuleContext', function() {
-    it.skip('should include expected properties', function() {
+    it('should include expected properties', function() {
+      var con = this.horde.createModuleContext();
+      con.config.should.deep.equal(this.horde.grunt.config.getRaw());
+
+      con.path.should.deep.equal(require('path'));
+      con.shelljs.should.deep.equal(require('shelljs'));
+
+      var processSpy = this.spy(this.horde.grunt.template, 'process');
+      con.t('txt', {a: 1});
+      processSpy.should.have.been.calledWithExactly('txt', {a: 1});
     });
   });
 
   describe('#reduceDirToConfig', function() {
-    it.skip('should collect top-level keys', function() {
+    beforeEach(function() {
+      this.memo = {index: {}, categorized: {}};
+      this.indexMod = {a: 1, b: 2};
+      this.nonIndexMod1 = {c: 3};
+      this.nonIndexMod2 = {d: 4};
+      var stub = this.stub(this.horde, 'require');
+      stub.withArgs('index.js').returns(this.indexMod);
+      stub.withArgs('non-index1.js').returns(this.nonIndexMod1);
+      stub.withArgs('non-index2.js').returns(this.nonIndexMod2);
     });
 
-    it.skip('should collect file-categorized keys', function() {
+    it('should collect top-level keys', function() {
+      var out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'index.js');
+      out.should.deep.equal({index: this.indexMod, categorized:{}});
     });
-  });
 
-  describe('#t', function() {
-    it.skip('should alias grunt method', function() {
+    it('should collect file-categorized keys', function() {
+      var out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'non-index1.js');
+      out.should.deep.equal({index: {}, categorized: this.nonIndexMod1});
+      out = GruntHorde.reduceDirToConfig.call(this.horde, out, 'non-index2.js');
+      out.should.deep.equal({index: {}, categorized: {c: 3, d: 4}});
     });
   });
 
