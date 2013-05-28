@@ -114,6 +114,14 @@ describe('GruntHorde', function() {
     });
   });
 
+  describe('#reduceDirToConfig', function() {
+    it.skip('should collect top-level keys', function() {
+    });
+
+    it.skip('should collect file-categorized keys', function() {
+    });
+  });
+
   describe('#t', function() {
     it.skip('should alias grunt method', function() {
     });
