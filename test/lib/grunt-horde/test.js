@@ -126,4 +126,14 @@ describe('GruntHorde', function() {
     it.skip('should alias grunt method', function() {
     });
   });
+
+  describe('#integration', function() {
+    it.skip('should load only base config fixture', function() {
+      // verify grunt stub use, as in #attack tests
+    });
+
+    it.skip('should load merged config fixtures', function() {
+      // verify grunt stub use, as in #attack tests
+    });
+  });
 });
