@@ -3,14 +3,14 @@ module.exports = function(grunt) {
 
   return {
     dist: {
-      command: 'component build --standalone gruntHorde --name grunt-horde --out dist'
+      command: 'component build --standalone <%= instanceName %> --name <%= projName %> --out dist'
     },
     test_lib: {
       options: this.decree.mochaShelljsOpt,
       command: 'mocha --colors --recursive --reporter spec test/lib'
     },
     dox_lib: {
-      command: 'apidox --input lib/grunt-horde/index.js --output docs/GruntHorde.md'
+      command: 'apidox --input lib/<%= projName %>/index.js --output docs/<%= klassName %>.md'
     }
   };
 };

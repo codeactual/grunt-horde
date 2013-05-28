@@ -1,6 +1,10 @@
 module.exports = function() {
   'use strict';
 
+  var distFile = this.t('<%= projName %>');
+  var distFiles = {};
+  distFiles[distFile] = distFile;
+
   return {
     dist: {
       options: {
@@ -8,9 +12,7 @@ module.exports = function() {
         mangle: false,
         beautify: true
       },
-      files: {
-        'dist/grunt-horde.js': 'dist/grunt-horde.js'
-      }
+      files: distFiles
     }
   };
 };
