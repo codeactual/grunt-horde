@@ -1,31 +1,16 @@
 # General
 
-- `loot()` may be used to load any number of modules.
-- Payloads collected by `loot()` are [merged recursively](https://github.com/pluma/assimilate), last wins.
+## [loot()](GruntHorde.md)
 
-# Context Properties
-
-Every module file will receive these properties.
-
-### `learn(key)`
-
-> Get the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
-
-### `demand(key, val)`
-
-> Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
-
-- Emits `grunt-horde:demand`. See [events](#events).
-
-### `t(template [, options])`
-
-> Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
+- May be used to load any number of modules.
+- Payloads collected [merged recursively](https://github.com/pluma/assimilate), last wins.
+- Layout and content of module files must follow [conventions](#modulefiles).
 
 # Variables
 
 ## Using `demand()` from `Gruntfile.js` and module contexts
 
-`demand()` operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
+[demand()](GruntHorde.md) operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
 
 - Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#contextproperties).
 - Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#contextproperties).
@@ -109,6 +94,24 @@ module.exports = function(grunt) {
   };
 };
 ```
+
+# Context Properties
+
+Every module file will receive these properties.
+
+### `learn(key)`
+
+> Get the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
+
+### `demand(key, val)`
+
+> Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
+
+- Emits `grunt-horde:demand`. See [events](#events).
+
+### `t(template [, options])`
+
+> Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
 
 # Events
 

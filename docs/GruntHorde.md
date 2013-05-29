@@ -108,12 +108,13 @@ Run all supported `grunt` configuration methods.
 
 > Load a config module. Merge in its payload.
 
-- Payloads are merged recursively, last wins.
+Payloads are merged recursively, last wins.
 
-**Example sources:**
+**Supported module types:**
 
-- Base config module, ex. `node_modules/my-base-config`
-- Project-local config module that overrides the base, ex. `config/grunt/`
+- Name of locally installed NPM package
+- Relative path, ex. `./config/grunt/`
+- Absolute path
 
 **Usage:**
 
@@ -148,6 +149,10 @@ registerMultiTask.js
 **Return:**
 
 `{object}` this
+
+**See:**
+
+- [Modules Documentation](modules.md)
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
