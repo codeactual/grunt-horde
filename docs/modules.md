@@ -4,7 +4,7 @@
 
 - May be used to load any number of modules.
 - Payloads collected [merged recursively](https://github.com/pluma/assimilate), last wins.
-- Layout and content of module files must follow [conventions](#modulefiles).
+- Layout and content of module files must follow [conventions](#module-files).
 
 # Variables
 
@@ -12,8 +12,8 @@
 
 [demand()](GruntHorde.md) operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
 
-- Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#contextproperties).
-- Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#contextproperties).
+- Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
+- Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
 
 # Module Files
 
