@@ -1,14 +1,13 @@
 {
   "name": "grunt-horde",
   "repo": "codeactual/grunt-horde",
-  "description": "Organized grunt task configuration",
+  "description": "Modular grunt configuration",
   "version": "0.1.0",
   "keywords": [
     "grunt",
     "task",
     "config",
     "layout",
-    "organized",
     "modules"
   ],
   "dependencies": {

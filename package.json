@@ -1,6 +1,6 @@
 {
   "name": "grunt-horde",
-  "description": "Organized grunt task configuration",
+  "description": "Modular grunt task configuration",
   "version": "0.1.0",
   "main": "index.js",
   "keywords": [
@@ -8,7 +8,6 @@
     "task",
     "config",
     "layout",
-    "organized",
     "modules"
   ],
   "contributors": [

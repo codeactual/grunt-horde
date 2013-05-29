@@ -1,4 +1,4 @@
-Organized grunt task configuration
+Modular grunt configuration
 
 _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 
