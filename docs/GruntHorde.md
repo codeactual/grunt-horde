@@ -186,6 +186,10 @@ console.log(horde.learn('x.y.z')); // 20
 console.log(grunt.config.getRaw().x.y.z); // 20
 ```
 
+**Emits:**
+
+- `grunt-horde:demand` on every invocation.
+
 **Parameters:**
 
 - `{string} key`

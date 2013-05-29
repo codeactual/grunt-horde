@@ -101,13 +101,13 @@ Every module file will receive these properties.
 
 ### `learn(key)`
 
-> Get the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
+> Alias for [GruntHorde.prototype.learn](GruntHorde.md).
 
 ### `demand(key, val)`
 
-> Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
+> Alias for [GruntHorde.prototype.demand](GruntHorde.md).
 
-- Emits `grunt-horde:demand`. See [events](#events).
+- `grunt-horde:demand` event will emit the module's filename in the `source` argument.
 
 ### `t(template [, options])`
 
