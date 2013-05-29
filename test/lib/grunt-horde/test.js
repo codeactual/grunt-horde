@@ -232,9 +232,12 @@ describe('GruntHorde', function() {
 
     it('should collect file-categorized keys', function() {
       var out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'non-index1.js');
-      out.should.deep.equal({index: {}, categorized: this.nonIndexMod1});
+      out.should.deep.equal({index: {}, categorized: {'non-index1': this.nonIndexMod1}});
       out = GruntHorde.reduceDirToConfig.call(this.horde, out, 'non-index2.js');
-      out.should.deep.equal({index: {}, categorized: {c: 3, d: 4}});
+      out.should.deep.equal({
+        index: {},
+        categorized: {'non-index1': {c: 3}, 'non-index2': {d: 4}}
+      });
     });
   });
 
@@ -246,7 +249,19 @@ describe('GruntHorde', function() {
           .attack();
       });
 
-      it.skip('should init config', function() {
+      it('should init config', function() {
+        this.gruntStub.initConfig.should.have.been.calledWithExactly({
+          i1: {i1k1: 'i1v1'},
+          i2: {i2k1: 'i2v1'},
+          plugin1: {
+            p1k1: {a: 1, b: 2},
+            p1k2: {c: 3, d: 4}
+          },
+          plugin2: {
+            p2k1: {e: 5, f: 6},
+            p2k2: {g: 7, h: 8}
+          }
+        });
       });
 
       it('should load tasks', function() {
@@ -255,17 +270,26 @@ describe('GruntHorde', function() {
         this.gruntStub.loadTasks.should.have.been.calledWithExactly('path/to/tasks2');
       });
 
-      it.skip('should load npm tasks', function() {
+      it('should load npm tasks', function() {
+        this.gruntStub.loadNpmTasks.should.have.been.calledTwice;
+        this.gruntStub.loadNpmTasks.should.have.been.calledWithExactly('npm-task-1');
+        this.gruntStub.loadNpmTasks.should.have.been.calledWithExactly('npm-task-2');
       });
 
-      it.skip('should register tasks', function() {
+      it('should register tasks', function() {
+        this.gruntStub.registerTask.should.have.been.calledTwice;
+        this.gruntStub.registerTask.should.have.been.calledWithExactly('task1', ['task1step1', 'task1step2']);
+        this.gruntStub.registerTask.should.have.been.calledWithExactly('task2', ['task2step1', 'task2step2']);
       });
 
-      it.skip('should register multi tasks', function() {
+      it('should register multi tasks', function() {
+        this.gruntStub.registerMultiTask.should.have.been.calledTwice;
+        this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('multi1', 'multi1 desc', sinon.match.func);
+        this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('multi2', 'multi2 desc', sinon.match.func);
       });
     });
 
-    describe('mmerged config fixtures', function() {
+    describe('merged config fixtures', function() {
       beforeEach(function() {
         this.horde
           .loot(fixtureDir + '/base-config')
