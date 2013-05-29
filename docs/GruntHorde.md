@@ -179,13 +179,6 @@ console.log(horde.getConfig('x.y.z')); // 20
 console.log(grunt.config.getRaw().x.y.z); // 20
 ```
 
-**Emits:**
-
-- `grunt-horde:set-config`: On every invocation
-  - `(key, val)`
-  - `{string} key` Config key, ex. `x.y.z`
-  - `{string} val` Config val, ex. `20`
-
 **Parameters:**
 
 - `{string} key`
@@ -194,6 +187,10 @@ console.log(grunt.config.getRaw().x.y.z); // 20
 **Return:**
 
 `{object}` this
+
+**See:**
+
+- [Events](modules.md#events)
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
