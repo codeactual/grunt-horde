@@ -55,7 +55,6 @@ Defines project-specific configs merged recursively over `my-base-config`.
 
 ## API
 
-[Modules](docs/modules.md)
 [Documentation](docs/GruntHorde.md)
 
 ## License
