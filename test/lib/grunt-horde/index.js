@@ -104,14 +104,14 @@ describe('GruntHorde', function() {
   describe('#loot', function() {
     it('should merge in configs from dir', function() {
       var name = './rel/path/to/config/dir';
-      var configObj = {a: 'one', b: 2, c: ['x', 'y']};
 
       this.stub = this.stub(this.horde, 'dirToConfigObj');
-      this.stub.withArgs(name).returns(configObj);
+      this.stub.withArgs(name).returns({initConfig: {a: 'one', b: 2, c: ['x', 'y']}});
 
-      this.horde.config = {a: 1, b: 'two', c: ['z']};
+      this.horde.config.initConfig = {a: 1, b: 'two', c: ['z'], d: 4};
       this.horde.loot(name);
-      this.horde.config.should.deep.equal({a: 'one', b: 2, c: ['x', 'y']});
+      this.horde.attack();
+      this.horde.config.initConfig.should.deep.equal({a: 'one', b: 2, c: ['x', 'y'], d: 4});
     });
   });
 

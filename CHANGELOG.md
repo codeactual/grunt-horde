@@ -1,3 +1,7 @@
+# 0.2.1
+
+* fix(loot): Defer merge until `attack`
+
 # 0.2.0
 
 * Rename `set/setConfig` methods to `demand`

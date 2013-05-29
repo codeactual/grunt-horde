@@ -77,6 +77,7 @@ module.exports = function(grunt) {
   - `{object} registerTask`
 - `{string} [home=process.cwd]` Absolute path to project root dir w/out trailing slash
 - `{object} grunt` Instance injected into Gruntfile.js
+- `{array} lootBatch` Pending merge functions collected in Gruntfile.prototype.loot
 
 <sub>Go: [TOC](#tableofcontents)</sub>
 
@@ -108,7 +109,8 @@ Run all supported `grunt` configuration methods.
 
 > Load a config module. Merge in its payload.
 
-Payloads are merged recursively, last wins.
+- Merge operation is deferred until [GruntHorde.prototype.attack](#grunthordeprototypeattack).
+- Payloads are merged recursively, last wins.
 
 **Supported module types:**
 
