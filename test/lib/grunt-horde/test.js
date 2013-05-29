@@ -25,7 +25,7 @@ describe('GruntHorde', function() {
   'use strict';
 
   beforeEach(function() {
-    this.horde = gruntHorde.create();
+    this.horde = gruntHorde.create(grunt);
 
     this.key = 'x.y.z';
     this.val = 20;
