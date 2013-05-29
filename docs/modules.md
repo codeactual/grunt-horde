@@ -15,7 +15,7 @@ Every module file will receive these properties.
 
 > Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
 
-- Emits `grunt-horde:set-config`. See [events](#events).
+- Emits `grunt-horde:demand`. See [events](#events).
 
 ### `t(template [, options])`
 
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
 
 # Events
 
-## `grunt-horde:set-config`
+## `grunt-horde:demand`
 
 > Fires on every `set()` invocation.
 

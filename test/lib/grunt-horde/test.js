@@ -218,11 +218,11 @@ describe('GruntHorde', function() {
       var config = grunt.config.getRaw();
 
       var setSpy = this.spy(teaProp, 'set');
-      context.set(this.key, this.val);
+      context.demand(this.key, this.val);
       setSpy.should.have.been.calledWithExactly(config, this.key, this.val);
 
       var getSpy = this.spy(teaProp, 'get');
-      context.get(this.key).should.equal(this.val);
+      context.learn(this.key).should.equal(this.val);
       getSpy.should.have.been.calledWithExactly(config, this.key);
 
       var processSpy = this.spy(grunt.template, 'process');
@@ -269,7 +269,7 @@ describe('GruntHorde', function() {
 
     it('should emit event', function(testDone) {
       var self = this;
-      grunt.event.on('grunt-horde:set-config', function(key, val) {
+      grunt.event.on('grunt-horde:demand', function(key, val) {
         key.should.equal(self.key);
         val.should.equal(self.val);
         testDone();
