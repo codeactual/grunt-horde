@@ -16,7 +16,7 @@ Use `loot` to select configuration modules whose payloads are marged recursively
 ```js
 var horde = GruntHorde.create();
 horde
-  .loot('my-base-config-module')
+  .loot('my-base-config')
   .loot('./config/grunt')
   .attack();
 ```
