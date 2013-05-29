@@ -234,6 +234,68 @@
         };
         module.exports = assimilate;
     });
+    require.register("qualiancy-tea-properties/lib/properties.js", function(exports, require, module) {
+        var exports = module.exports = {};
+        exports.get = function(obj, path) {
+            var parsed = parsePath(path);
+            return getPathValue(parsed, obj);
+        };
+        exports.set = function(obj, path, val) {
+            var parsed = parsePath(path);
+            setPathValue(parsed, val, obj);
+        };
+        function defined(val) {
+            return "undefined" === typeof val;
+        }
+        function parsePath(path) {
+            var str = path.replace(/\[/g, ".["), parts = str.match(/(\\\.|[^.]+?)+/g);
+            return parts.map(function(value) {
+                var re = /\[(\d+)\]$/, mArr = re.exec(value);
+                if (mArr) return {
+                    i: parseFloat(mArr[1])
+                }; else return {
+                    p: value
+                };
+            });
+        }
+        function getPathValue(parsed, obj) {
+            var tmp = obj, res;
+            for (var i = 0, l = parsed.length; i < l; i++) {
+                var part = parsed[i];
+                if (tmp) {
+                    if (!defined(part.p)) tmp = tmp[part.p]; else if (!defined(part.i)) tmp = tmp[part.i];
+                    if (i == l - 1) res = tmp;
+                } else {
+                    res = undefined;
+                }
+            }
+            return res;
+        }
+        function setPathValue(parsed, val, obj) {
+            var tmp = obj;
+            for (var i = 0, l = parsed.length; i < l; i++) {
+                var part = parsed[i];
+                if (!defined(tmp)) {
+                    if (i == l - 1) {
+                        if (!defined(part.p)) tmp[part.p] = val; else if (!defined(part.i)) tmp[part.i] = val;
+                    } else {
+                        if (!defined(part.p) && tmp[part.p]) tmp = tmp[part.p]; else if (!defined(part.i) && tmp[part.i]) tmp = tmp[part.i]; else {
+                            var next = parsed[i + 1];
+                            if (!defined(part.p)) {
+                                tmp[part.p] = {};
+                                tmp = tmp[part.p];
+                            } else if (!defined(part.i)) {
+                                tmp[part.i] = [];
+                                tmp = tmp[part.i];
+                            }
+                        }
+                    }
+                } else {
+                    if (i == l - 1) tmp = val; else if (!defined(part.p)) tmp = {}; else if (!defined(part.i)) tmp = [];
+                }
+            }
+        }
+    });
     require.register("grunt-horde/lib/component/main.js", function(exports, require, module) {
         module.exports = {
             requireComponent: require
@@ -248,6 +310,10 @@
     require.alias("pluma-assimilate/dist/assimilate.js", "grunt-horde/deps/assimilate/index.js");
     require.alias("pluma-assimilate/dist/assimilate.js", "assimilate/index.js");
     require.alias("pluma-assimilate/dist/assimilate.js", "pluma-assimilate/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "grunt-horde/deps/tea-properties/lib/properties.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "grunt-horde/deps/tea-properties/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "tea-properties/index.js");
+    require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
     require.alias("grunt-horde/lib/component/main.js", "grunt-horde/index.js");
     if (typeof exports == "object") {
         module.exports = require("grunt-horde");

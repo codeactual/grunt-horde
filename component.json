@@ -7,7 +7,8 @@
   "dependencies": {
     "codeactual/extend": "0.1.0",
     "component/clone": "0.1.0",
-    "pluma/assimilate": "0.2.0"
+    "pluma/assimilate": "0.2.0",
+    "qualiancy/tea-properties": "0.1.0"
   },
   "main": "lib/component/main.js",
   "scripts": [

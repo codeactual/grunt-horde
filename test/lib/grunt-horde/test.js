@@ -241,6 +241,15 @@ describe('GruntHorde', function() {
     });
   });
 
+  describe('#setConfig', function() {
+    it('should update config', function() {
+      this.horde.setConfig('x.y.z', 20);
+      var config = this.horde.grunt.config.getRaw();
+      config.x.y.z.should.equal(20);
+      this.horde.getConfig('x.y.z').should.equal(20);
+    });
+  });
+
   describe('#integration', function() {
     describe('base config fixture', function() {
       beforeEach(function() {
