@@ -242,11 +242,26 @@ describe('GruntHorde', function() {
   });
 
   describe('#setConfig', function() {
+    beforeEach(function() {
+      this.key = 'x.y.z';
+      this.val = 20;
+    });
+
     it('should update config', function() {
-      this.horde.setConfig('x.y.z', 20);
+      this.horde.setConfig(this.key, this.val);
       var config = this.horde.grunt.config.getRaw();
-      config.x.y.z.should.equal(20);
-      this.horde.getConfig('x.y.z').should.equal(20);
+      config.x.y.z.should.equal(this.val);
+      this.horde.getConfig(this.key).should.equal(this.val);
+    });
+
+    it('should emit event', function(testDone) {
+      var self = this;
+      this.horde.grunt.event.on('grunt-horde:set-config', function(key, val) {
+        key.should.equal(self.key);
+        val.should.equal(self.val);
+        testDone();
+      });
+      this.horde.setConfig(this.key, this.val);
     });
   });
 
