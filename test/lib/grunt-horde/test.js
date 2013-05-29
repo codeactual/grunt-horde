@@ -234,12 +234,12 @@ describe('GruntHorde', function() {
     });
   });
 
-  describe('#setConfig', function() {
+  describe('#demand', function() {
     it('should update config', function() {
-      this.horde.setConfig(this.key, this.val);
+      this.horde.demand(this.key, this.val);
       var config = grunt.config.getRaw();
       config.x.y.z.should.equal(this.val);
-      this.horde.getConfig(this.key).should.equal(this.val);
+      this.horde.learn(this.key).should.equal(this.val);
     });
 
     it('should emit event', function(testDone) {
@@ -249,7 +249,7 @@ describe('GruntHorde', function() {
         val.should.equal(self.val);
         testDone();
       });
-      this.horde.setConfig(this.key, this.val);
+      this.horde.demand(this.key, this.val);
     });
   });
 

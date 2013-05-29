@@ -11,8 +11,8 @@ _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 - <a name="toc_grunthordeprototypeattack"></a><a name="toc_grunthordeprototype"></a>[GruntHorde.prototype.attack](#grunthordeprototypeattack)
 - <a name="toc_grunthordeprototypehomecwd"></a>[GruntHorde.prototype.home](#grunthordeprototypehomecwd)
 - <a name="toc_grunthordeprototypelootname"></a>[GruntHorde.prototype.loot](#grunthordeprototypelootname)
-- <a name="toc_grunthordeprototypegetconfigkey"></a>[GruntHorde.prototype.getConfig](#grunthordeprototypegetconfigkey)
-- <a name="toc_grunthordeprototypesetconfigkey-val"></a>[GruntHorde.prototype.setConfig](#grunthordeprototypesetconfigkey-val)
+- <a name="toc_grunthordeprototypelearnkey"></a>[GruntHorde.prototype.learn](#grunthordeprototypelearnkey)
+- <a name="toc_grunthordeprototypedemandkey-val"></a>[GruntHorde.prototype.demand](#grunthordeprototypedemandkey-val)
 
 <a name="exports"></a>
 
@@ -151,14 +151,14 @@ registerMultiTask.js
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
-# GruntHorde.prototype.getConfig(key)
+# GruntHorde.prototype.learn(key)
 
 > Get a `grunt.config` property. Supports `x.y.z` property paths.
 
 **Usage:**
 
 ```js
-horde.setConfig('x.y.z', 20);
+horde.demand('x.y.z', 20);
 console.log(grunt.config.getRaw().x.y.z); // 20
 ```
 
@@ -172,15 +172,15 @@ console.log(grunt.config.getRaw().x.y.z); // 20
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
-# GruntHorde.prototype.setConfig(key, val)
+# GruntHorde.prototype.demand(key, val)
 
 > Set a `grunt.config` property. Supports `x.y.z` property paths.
 
 **Usage:**
 
 ```js
-horde.setConfig('x.y.z', 20);
-console.log(horde.getConfig('x.y.z')); // 20
+horde.demand('x.y.z', 20);
+console.log(horde.learn('x.y.z')); // 20
 console.log(grunt.config.getRaw().x.y.z); // 20
 ```
 
