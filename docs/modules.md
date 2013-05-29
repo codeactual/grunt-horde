@@ -94,7 +94,7 @@ module.exports = function(grunt) {
 
 ```js
 module.exports = function(grunt) {
-  var myMultiTask = require('./multi-tasks/secret-sauce.js);
+  var myMultiTask = require('./multi-tasks/secret-sauce.js');
   return {
     myMultiTask: ['some description', myMultiTask]
   };
