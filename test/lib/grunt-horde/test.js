@@ -15,6 +15,9 @@ var gruntHorde = require('../../..');
 var GruntHorde = gruntHorde.GruntHorde;
 var fixtureDir = __dirname + '/../../fixture';
 
+var requireComponent = require('../../../lib/component/require');
+var teaProp = requireComponent('tea-properties');
+
 require('sinon-doublist')(sinon, 'mocha');
 require('sinon-doublist-fs')('mocha');
 
@@ -24,6 +27,8 @@ describe('GruntHorde', function() {
   beforeEach(function() {
     this.horde = gruntHorde.create();
 
+    this.key = 'x.y.z';
+    this.val = 20;
     this.config = {iAmA: 'fake config obj'};
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
@@ -184,14 +189,19 @@ describe('GruntHorde', function() {
 
   describe('#createModuleContext', function() {
     it('should include expected properties', function() {
-      var con = this.horde.createModuleContext();
-      con.config.should.deep.equal(grunt.config.getRaw());
+      var context = this.horde.createModuleContext();
+      var config = grunt.config.getRaw();
 
-      con.path.should.deep.equal(require('path'));
-      con.shelljs.should.deep.equal(require('shelljs'));
+      var setSpy = this.spy(teaProp, 'set');
+      context.set(this.key, this.val);
+      setSpy.should.have.been.calledWithExactly(config, this.key, this.val);
+
+      var getSpy = this.spy(teaProp, 'get');
+      context.get(this.key).should.equal(this.val);
+      getSpy.should.have.been.calledWithExactly(config, this.key);
 
       var processSpy = this.spy(grunt.template, 'process');
-      con.t('txt', {a: 1});
+      context.t('txt', {a: 1});
       processSpy.should.have.been.calledWithExactly('txt', {a: 1});
     });
   });
@@ -225,11 +235,6 @@ describe('GruntHorde', function() {
   });
 
   describe('#setConfig', function() {
-    beforeEach(function() {
-      this.key = 'x.y.z';
-      this.val = 20;
-    });
-
     it('should update config', function() {
       this.horde.setConfig(this.key, this.val);
       var config = grunt.config.getRaw();
