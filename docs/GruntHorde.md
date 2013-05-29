@@ -1,4 +1,4 @@
-Modular grunt configuration
+Packageable grunt configuration modules
 
 _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 

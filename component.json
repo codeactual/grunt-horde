@@ -1,7 +1,7 @@
 {
   "name": "grunt-horde",
   "repo": "codeactual/grunt-horde",
-  "description": "Modular grunt configuration",
+  "description": "Packageable grunt configuration modules",
   "version": "0.1.0",
   "keywords": [
     "grunt",

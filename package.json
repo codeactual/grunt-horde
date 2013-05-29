@@ -1,6 +1,6 @@
 {
   "name": "grunt-horde",
-  "description": "Modular grunt task configuration",
+  "description": "Packageable grunt configuration modules",
   "version": "0.1.0",
   "main": "index.js",
   "keywords": [
