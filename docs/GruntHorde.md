@@ -129,13 +129,10 @@ horde.loot('/path/to/base'); // require('/path/to/base');
 
 ```
 initConfig/
-```js
-index.js
-jshint.js
-uglify.js
-shell.js
-```
-
+  index.js
+  jshint.js
+  uglify.js
+  shell.js
 loadTasks.js
 loadNpmTasks.js
 registerTask.js
