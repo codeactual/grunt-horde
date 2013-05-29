@@ -25,7 +25,10 @@ Every module file will receive these properties.
 
 ## Using `demand()` from `Gruntfile.js` and module contexts
 
-In both situations, `demand()` operates the same
+`demand()` operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
+
+- Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#contextproperties).
+- Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#contextproperties).
 
 # Module Files
 

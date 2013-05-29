@@ -1,9 +1,10 @@
 # grunt-horde
 
-Organized grunt task configuration
+Packageable grunt configuration modules
 
-- Separate files define payloads for `initConfig`, `loadNpmTask`, etc.
-- Optionally load multiple modules whose payloads are recursively merged.
+- Store configuration files in NPM modules or plain directories.
+- Separate files define values for `initConfig`, `loadNpmTask`, etc.
+- Recursively merge configuration values collected from any number of modules/directories.
 
 [![Build Status](https://travis-ci.org/codeactual/grunt-horde.png)](https://travis-ci.org/codeactual/grunt-horde)
 
@@ -11,14 +12,19 @@ Organized grunt task configuration
 
 ### `Gruntfile.js`
 
-Use `loot` to select configuration modules whose payloads are marged recursively, last wins.
+- `loot` selects configuration modules whose payloads are marged recursively.
+- `demand` updates the raw `grunt` config object.
+- `attack` applies the configuration to `grunt`.
 
 ```js
-var horde = GruntHorde.create();
-horde
-  .loot('my-base-config')
-  .loot('./config/grunt')
-  .attack();
+module.exports = function(grunt) {
+  var horde = GruntHorde.create();
+  horde
+    .loot('my-base-config')
+    .loot('./config/grunt')
+    .demand('pkg', grunt.file.readJSON('package.json'))
+    .attack();
+};
 ```
 
 ### `./node_modules/my-base-config/`
