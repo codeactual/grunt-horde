@@ -3,7 +3,7 @@ module.exports = function() {
 
   return {
     p2k2: {c: 3, d: 'overwritten'},
-    p2k3: {i: 9, j: 10},
-    p2k4: {k: 11, l: 12}
+    p2k3: {e: 5, f: 6},
+    p2k4: {g: 7, h: 8}
   };
 };
