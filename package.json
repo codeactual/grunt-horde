@@ -21,11 +21,13 @@
   "dependencies": {
     "shelljs": "~0.1.4"
   },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
   "devDependencies": {
     "chai": "~1.6.0",
     "component": "~0.16.0",
     "apidox": "~0.3.1",
-    "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.5.4",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-shell": "~0.2.1",

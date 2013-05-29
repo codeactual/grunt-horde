@@ -29,17 +29,9 @@ describe('GruntHorde', function() {
     this.home = '/path/to/proj';
     this.modPath = '/path/to/nowhere';
     this.gruntStub = this.stub(grunt);
-
-    this.horde.follow(grunt);
   });
 
   describe('#attack', function() {
-    it('should detect missing grunt instance', function() {
-      (function() {
-        gruntHorde.create().attack();
-      }).should.Throw(Error, 'grunt() value is missing');
-    });
-
     it('should init config', function() {
       var expected = {iAmA: 'fake init config'};
       this.horde.config.initConfig = expected;
@@ -81,15 +73,6 @@ describe('GruntHorde', function() {
       this.gruntStub.registerMultiTask.should.have.been.calledTwice;
       this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('t1', 't1 arg1', 't1 arg2');
       this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('t2', 't2 arg1', 't2 arg2');
-    });
-  });
-
-  describe('#follow', function() {
-    it('should store grunt instance', function() {
-      var horde = gruntHorde.create();
-      should.equal(horde.grunt, null);
-      horde.follow(grunt);
-      horde.grunt.should.deep.equal(grunt);
     });
   });
 
@@ -140,7 +123,7 @@ describe('GruntHorde', function() {
     });
 
     it('should pass grunt as arg', function() {
-      this.output.grunt.should.deep.equal(this.horde.grunt);
+      this.output.grunt.should.deep.equal(grunt);
     });
   });
 
@@ -202,12 +185,12 @@ describe('GruntHorde', function() {
   describe('#createModuleContext', function() {
     it('should include expected properties', function() {
       var con = this.horde.createModuleContext();
-      con.config.should.deep.equal(this.horde.grunt.config.getRaw());
+      con.config.should.deep.equal(grunt.config.getRaw());
 
       con.path.should.deep.equal(require('path'));
       con.shelljs.should.deep.equal(require('shelljs'));
 
-      var processSpy = this.spy(this.horde.grunt.template, 'process');
+      var processSpy = this.spy(grunt.template, 'process');
       con.t('txt', {a: 1});
       processSpy.should.have.been.calledWithExactly('txt', {a: 1});
     });
@@ -249,14 +232,14 @@ describe('GruntHorde', function() {
 
     it('should update config', function() {
       this.horde.setConfig(this.key, this.val);
-      var config = this.horde.grunt.config.getRaw();
+      var config = grunt.config.getRaw();
       config.x.y.z.should.equal(this.val);
       this.horde.getConfig(this.key).should.equal(this.val);
     });
 
     it('should emit event', function(testDone) {
       var self = this;
-      this.horde.grunt.event.on('grunt-horde:set-config', function(key, val) {
+      grunt.event.on('grunt-horde:set-config', function(key, val) {
         key.should.equal(self.key);
         val.should.equal(self.val);
         testDone();

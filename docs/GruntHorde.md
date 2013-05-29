@@ -8,7 +8,8 @@ _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 - <a name="toc_exportscreate"></a>[exports.create](#exportscreate)
 - <a name="toc_exportsextendext"></a>[exports.extend](#exportsextendext)
 - <a name="toc_grunthorde"></a>[GruntHorde](#grunthorde)
-- <a name="toc_grunthordeprototypelootname"></a><a name="toc_grunthordeprototype"></a>[GruntHorde.prototype.loot](#grunthordeprototypelootname)
+- <a name="toc_grunthordeprototypeattack"></a><a name="toc_grunthordeprototype"></a>[GruntHorde.prototype.attack](#grunthordeprototypeattack)
+- <a name="toc_grunthordeprototypelootname"></a>[GruntHorde.prototype.loot](#grunthordeprototypelootname)
 - <a name="toc_grunthordeprototypecreatemodulecontext"></a>[GruntHorde.prototype.createModuleContext](#grunthordeprototypecreatemodulecontext)
 - <a name="toc_grunthordeprototyperequire"></a>[GruntHorde.prototype.require](#grunthordeprototyperequire)
 - <a name="toc_grunthordeprototyperequiredir"></a>[GruntHorde.prototype.requireDir](#grunthordeprototyperequiredir)
@@ -54,35 +55,36 @@ _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 
 ```js
 // Gruntfile.js
-
 module.exports = function(grunt) {
   var horde = GruntHorde.create();
   horde
-    .follow(grunt)
     .loot('my-base-config-module')
     .loot('./config/grunt')
     .attack();
 };
 ```
 
-**Required before calling `attack()`:**
-
-- `follow()`
-
 **Properties:**
 
-- `{object} config` Gruntfile.js sections
+- `{object} config` Gruntfile.js values indexed by `grunt` method name
   - `{object} initConfig`
   - `{object} loadNpmTasks`
   - `{object} loadTasks`
   - `{object} registerMultiTask`
   - `{object} registerTask`
-- `{object} grunt` Module collected from Gruntfile.js
-- `{string} home` Absolute path to project root dir w/out trailing slash
+- `{string} [home=process.cwd]` Absolute path to project root dir w/out trailing slash
 
 <sub>Go: [TOC](#tableofcontents)</sub>
 
 <a name="grunthordeprototype"></a>
+
+# GruntHorde.prototype.attack()
+
+> Apply configuration.
+
+Run all supported `grunt` configuration methods.
+
+<sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
 # GruntHorde.prototype.loot(name)
 
