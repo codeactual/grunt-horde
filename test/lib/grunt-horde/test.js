@@ -229,6 +229,18 @@ describe('GruntHorde', function() {
       context.t('txt', {a: 1});
       processSpy.should.have.been.calledWithExactly('txt', {a: 1});
     });
+
+    it('should include demand bound to source', function(testDone) {
+      var self = this;
+      var context = this.horde.createModuleContext(this.modPath);
+      grunt.event.once('grunt-horde:demand', function(source, key, val) {
+        source.should.equal(self.modPath);
+        key.should.equal(self.key);
+        val.should.equal(self.val);
+        testDone();
+      });
+      context.demand(this.key, this.val);
+    });
   });
 
   describe('#reduceDirToConfig', function() {
@@ -269,7 +281,8 @@ describe('GruntHorde', function() {
 
     it('should emit event', function(testDone) {
       var self = this;
-      grunt.event.on('grunt-horde:demand', function(key, val) {
+      grunt.event.once('grunt-horde:demand', function(source, key, val) {
+        source.should.equal('Gruntfile');
         key.should.equal(self.key);
         val.should.equal(self.val);
         testDone();

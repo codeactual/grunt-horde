@@ -7,11 +7,11 @@
 
 Every module file will receive these properties.
 
-### `get(key)`
+### `learn(key)`
 
 > Get the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
 
-### `set(key, val)`
+### `demand(key, val)`
 
 > Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
 
@@ -20,6 +20,12 @@ Every module file will receive these properties.
 ### `t(template [, options])`
 
 > Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
+
+# Variables
+
+## Using `demand()` from `Gruntfile.js` and module contexts
+
+In both situations, `demand()` operates the same
 
 # Module Files
 
@@ -103,11 +109,14 @@ module.exports = function(grunt) {
 
 # Events
 
+Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.
+
 ## `grunt-horde:demand`
 
 > Fires on every `set()` invocation.
 
 Receives arguments:
 
+- `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} val` Config val, ex. `20`
