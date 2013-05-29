@@ -155,7 +155,7 @@ registerMultiTask.js
 
 # GruntHorde.prototype.learn(key)
 
-> Get a `grunt.config` property. Supports `x.y.z` property paths.
+> Get a raw `grunt.config` property. Supports `x.y.z` property paths.
 
 **Usage:**
 
@@ -176,7 +176,7 @@ console.log(grunt.config.getRaw().x.y.z); // 20
 
 # GruntHorde.prototype.demand(key, val)
 
-> Set a `grunt.config` property. Supports `x.y.z` property paths.
+> Set a raw `grunt.config` property. Supports `x.y.z` property paths.
 
 **Usage:**
 
