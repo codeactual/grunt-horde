@@ -133,6 +133,13 @@ describe('GruntHorde', function() {
   });
 
   describe('#requireIfExists', function() {
+    it('should test resolved path', function() {
+      var stub = this.stub(shelljs, 'test');
+      stub.returns(false);
+      this.horde.requireIfExists('./rel/path/file.js');
+      stub.should.have.been.calledWithExactly('-e', this.cwd + '/rel/path/file.js');
+    });
+
     it('should return loaded config if exists', function() {
       this.stubFile(this.modPath).make();
       var stub = this.stub(this.horde, 'require');
@@ -144,7 +151,6 @@ describe('GruntHorde', function() {
       this.horde.requireIfExists(this.modPath).should.deep.equal({});
     });
   });
-
 
   describe('#requireDir', function() {
     beforeEach(function() {
@@ -175,6 +181,13 @@ describe('GruntHorde', function() {
   });
 
   describe('#requireDirIfExists', function() {
+    it('should test resolved path', function() {
+      var stub = this.stub(shelljs, 'test');
+      stub.returns(false);
+      this.horde.requireDirIfExists('./rel/path');
+      stub.should.have.been.calledWithExactly('-d', this.cwd + '/rel/path');
+    });
+
     it('should return loaded config if exists', function() {
       this.stubFile(this.modPath).readdir(['child']).make();
       var stub = this.stub(this.horde, 'requireDir');
