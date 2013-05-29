@@ -2,8 +2,7 @@ module.exports = function(grunt) {
   'use strict';
 
   return {
-    default: [['jshint']],
-    dox: [['shell:dox_lib']],
-    build: [['default', 'shell:build']]
+    task1: [['task1step1', 'task1step2']],
+    task2: [['task2step1', 'task2step2']]
   };
 };

@@ -22,7 +22,7 @@ describe('GruntHorde', function() {
   'use strict';
 
   beforeEach(function() {
-    this.horde = new gruntHorde.create();
+    this.horde = gruntHorde.create();
 
     this.config = {iAmA: 'fake config obj'};
     this.cwd = process.cwd();
@@ -34,15 +34,9 @@ describe('GruntHorde', function() {
   });
 
   describe('#attack', function() {
-    beforeEach(function() {
-      this.horde
-        .loot(fixtureDir + '/base-config')
-        .loot(fixtureDir + '/local-config');
-    });
-
     it('should detect missing grunt instance', function() {
       (function() {
-        (new gruntHorde.create()).attack();
+        gruntHorde.create().attack();
       }).should.Throw(Error, 'grunt() value is missing');
     });
 
@@ -92,7 +86,7 @@ describe('GruntHorde', function() {
 
   describe('#follow', function() {
     it('should store grunt instance', function() {
-      var horde = new gruntHorde.create();
+      var horde = gruntHorde.create();
       should.equal(horde.grunt, null);
       horde.follow(grunt);
       horde.grunt.should.deep.equal(grunt);
@@ -245,12 +239,43 @@ describe('GruntHorde', function() {
   });
 
   describe('#integration', function() {
-    it.skip('should load only base config fixture', function() {
-      // verify grunt stub use, as in #attack tests
+    describe('base config fixture', function() {
+      beforeEach(function() {
+        this.horde
+          .loot(fixtureDir + '/base-config')
+          .attack();
+      });
+
+      it.skip('should init config', function() {
+      });
+
+      it('should load tasks', function() {
+        this.gruntStub.loadTasks.should.have.been.calledTwice;
+        this.gruntStub.loadTasks.should.have.been.calledWithExactly('path/to/tasks1');
+        this.gruntStub.loadTasks.should.have.been.calledWithExactly('path/to/tasks2');
+      });
+
+      it.skip('should load npm tasks', function() {
+      });
+
+      it.skip('should register tasks', function() {
+      });
+
+      it.skip('should register multi tasks', function() {
+      });
     });
 
-    it.skip('should load merged config fixtures', function() {
-      // verify grunt stub use, as in #attack tests
+    describe('mmerged config fixtures', function() {
+      beforeEach(function() {
+        this.horde
+          .loot(fixtureDir + '/base-config')
+          .loot(fixtureDir + '/local-config')
+          .attack();
+      });
+
+      it.skip('should load merged config fixtures', function() {
+        // verify grunt stub use, as in #attack tests
+      });
     });
   });
 });

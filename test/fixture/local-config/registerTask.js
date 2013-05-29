@@ -2,7 +2,8 @@ module.exports = function(grunt) {
   'use strict';
 
   return {
-    dist: [['default', 'shell:dist', 'uglify:dist', 'dox']],
-    test: [['build', 'shell:test_lib']]
+    task1: [['task1step1 - overwritten', 'task1step2']],
+    task3: [['task3step1', 'task3step2']],
+    task4: [['task4step1', 'task4step2']]
   };
 };

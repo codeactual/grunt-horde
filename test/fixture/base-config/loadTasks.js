@@ -2,7 +2,7 @@ module.exports = function(grunt) {
   'use strict';
 
   return {
-    'npm-task-1': true,
-    'npm-task-2': true
+    'path/to/tasks1': true,
+    'path/to/tasks2': true
   };
 };
