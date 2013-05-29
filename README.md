@@ -4,7 +4,6 @@ Organized grunt task configuration
 
 - Separate files define payloads for `initConfig`, `loadNpmTask`, etc.
 - Optionally load multiple modules whose payloads are recursively merged.
--
 
 [![Build Status](https://travis-ci.org/codeactual/grunt-horde.png)](https://travis-ci.org/codeactual/grunt-horde)
 
