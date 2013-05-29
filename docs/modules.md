@@ -2,7 +2,6 @@
 
 - `loot()` may be used to load any number of modules.
 - Payloads collected by `loot()` are [merged recursively](https://github.com/pluma/assimilate), last wins.
--
 
 # Context Properties
 
@@ -10,23 +9,23 @@ Every module file will receive these properties.
 
 ### `get(key)`
 
-Get the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
+> Get the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
 
 ### `set(key, val)`
 
-Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
+> Set the value of a `grunt.config.getRaw()` property. [Deep property selection](https://github.com/qualiancy/tea-properties) is supported.
 
-Emits `grunt-horde:set-config`. See [events](#events).
+- Emits `grunt-horde:set-config`. See [events](#events).
 
 ### `t(template [, options])`
 
-Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
+> Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
 
 # Module Files
 
 ## `initConfig/index.js`
 
-Defines top-level keys passed to `grunt.initConfig`.
+> Defines top-level keys passed to `grunt.initConfig`.
 
 ```js
 module.exports = function(grunt) {
@@ -39,7 +38,7 @@ module.exports = function(grunt) {
 
 ## `initConfig/<name>.js`, ex. `initConfig/uglify.js`
 
-Defines the `uglify` section passed to `grunt.initConfig`.
+> Defines the `uglify` section passed to `grunt.initConfig`.
 
 ```js
 module.exports = function(grunt) {
@@ -55,7 +54,7 @@ module.exports = function(grunt) {
 
 ## `loadNpmTasks.js`
 
-`false` can be used to disable an NPM task enabled in a module earlier in the merge.
+> `false` can be used to disable an NPM task enabled in a module earlier in the merge.
 
 ```js
 module.exports = function(grunt) {
@@ -67,7 +66,7 @@ module.exports = function(grunt) {
 
 ## `loadTasks.js`
 
-`false` can be used to disable a task path enabled in a module earlier in the merge.
+> `false` can be used to disable a task path enabled in a module earlier in the merge.
 
 ```js
 module.exports = function(grunt) {
@@ -79,7 +78,7 @@ module.exports = function(grunt) {
 
 ## `registerTask.js`
 
-Defines the arguments passed to `grunt.registerTask`.
+> Defines the arguments passed to `grunt.registerTask`.
 
 ```js
 module.exports = function(grunt) {
@@ -91,7 +90,7 @@ module.exports = function(grunt) {
 
 ## `registerMultiTask.js`
 
-Defines the arguments passed to `grunt.registerMultiTask`.
+> Defines the arguments passed to `grunt.registerMultiTask`.
 
 ```js
 module.exports = function(grunt) {

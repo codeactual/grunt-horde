@@ -59,8 +59,8 @@ _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 ```js
 // Gruntfile.js
 module.exports = function(grunt) {
-  var horde = GruntHorde.create();
-  horde
+  require('grunt-horde')
+    .create(grunt)
     .loot('my-base-config-module')
     .loot('./config/grunt')
     .attack();
