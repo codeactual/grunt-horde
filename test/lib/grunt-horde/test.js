@@ -16,6 +16,7 @@ var GruntHorde = gruntHorde.GruntHorde;
 var fixtureDir = __dirname + '/../../fixture';
 
 var requireComponent = require('../../../lib/component/require');
+var mergeDeep = requireComponent('assimilate').withStrategy('deep');
 var teaProp = requireComponent('tea-properties');
 
 require('sinon-doublist')(sinon, 'mocha');
@@ -25,10 +26,18 @@ describe('GruntHorde', function() {
   'use strict';
 
   beforeEach(function() {
+    // Clean up prior test's modifications to static config object.
+    var gruntRawConfig = grunt.config.getRaw();
+    Object.keys(gruntRawConfig).forEach(function(key) {
+      delete gruntRawConfig[key];
+    });
+
     this.horde = gruntHorde.create(grunt);
 
     this.key = 'x.y.z';
     this.val = 20;
+    this.keyValObj = {};
+    teaProp.set(this.keyValObj, this.key, this.val);
     this.config = {iAmA: 'fake config obj'};
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
@@ -39,9 +48,12 @@ describe('GruntHorde', function() {
   describe('#attack', function() {
     it('should init config', function() {
       var expected = {iAmA: 'fake init config'};
+      this.horde.demand(this.key, this.val);
       this.horde.config.initConfig = expected;
       this.horde.attack();
-      this.gruntStub.initConfig.should.have.been.calledWithExactly(expected);
+      this.gruntStub.initConfig.should.have.been.calledWithExactly(
+        mergeDeep({}, expected, this.keyValObj)
+      );
     });
 
     it('should load tasks', function() {
