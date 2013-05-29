@@ -3,7 +3,14 @@
   "repo": "codeactual/grunt-horde",
   "description": "Organized grunt task configuration",
   "version": "0.1.0",
-  "keywords": [],
+  "keywords": [
+    "grunt",
+    "task",
+    "config",
+    "layout",
+    "organized",
+    "modules"
+  ],
   "dependencies": {
     "codeactual/extend": "0.1.0",
     "component/clone": "0.1.0",

@@ -3,7 +3,14 @@
   "description": "Organized grunt task configuration",
   "version": "0.1.0",
   "main": "index.js",
-  "keywords": [],
+  "keywords": [
+    "grunt",
+    "task",
+    "config",
+    "layout",
+    "organized",
+    "modules"
+  ],
   "contributors": [
     {
       "name": "David Smith",
