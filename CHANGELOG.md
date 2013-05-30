@@ -1,3 +1,7 @@
+# 0.2.2
+
+* fix(loot): Throw error on no such dir
+
 # 0.2.1
 
 * fix(loot): Defer merge until `attack`
