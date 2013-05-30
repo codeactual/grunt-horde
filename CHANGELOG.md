@@ -1,8 +1,9 @@
 # 0.2.2
 
+* feat(event): Add `mode` argument to `grunt-horde:demand` event payload to indicate whether write was accepted
 * fix(loot): Throw error on no such dir
 * fix(attack): Gruntfile demand() could not override modules
-* feat(event): Add `mode` argument to `grunt-horde:demand` event payload to indicate whether write was accepted
+* fix(module): Let `learn` access k/v pairs added in prior `loot`
 
 # 0.2.1
 

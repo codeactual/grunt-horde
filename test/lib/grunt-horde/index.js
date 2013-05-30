@@ -352,7 +352,7 @@ describe('GruntHorde', function() {
           },
           plugin2: {
             p2k1: {a: 1, b: 2},
-            p2k2: {c: 3, d: 4}
+            p2k2: {c: 3, d: [4]}
           }
         });
       });
@@ -397,7 +397,7 @@ describe('GruntHorde', function() {
           },
           plugin2: {
             p2k1: {a: 1, b: 2},
-            p2k2: {c: 3, d: 4}
+            p2k2: {c: 3, d: [4]}
           }
         });
       });
@@ -425,7 +425,7 @@ describe('GruntHorde', function() {
           },
           plugin2: {
             p2k1: {a: 1, b: 2},
-            p2k2: {c: 3, d: 'overwritten'},
+            p2k2: {c: 3, d: [4, 'merge']},
             p2k3: {e: 5, f: 6},
             p2k4: {g: 7, h: 8}
           }

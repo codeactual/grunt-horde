@@ -25,6 +25,15 @@
 
 Remidner: Sequence your `loot` calls based on module precendence, highest last.
 
+## Use `learn/demand` to merge with existing value, rather than a last-wins overwrite
+
+If `loot` has already loaded `moduleX` that defined key `dev.logs`, `moduleY` could include this:
+
+```js
+var orig = this.learn('dev.logs');
+this.demand('dev.logs', orig.concat('tmp/request.log'));
+```
+
 # Module Files
 
 ## `initConfig/index.js`
