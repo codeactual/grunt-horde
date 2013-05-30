@@ -10,8 +10,9 @@ _Source: [lib/grunt-horde/index.js](../lib/grunt-horde/index.js)_
 - <a name="toc_grunthorde"></a>[GruntHorde](#grunthorde)
 - <a name="toc_grunthordeprototypeattack"></a><a name="toc_grunthordeprototype"></a>[GruntHorde.prototype.attack](#grunthordeprototypeattack)
 - <a name="toc_grunthordeprototypehomecwd"></a>[GruntHorde.prototype.home](#grunthordeprototypehomecwd)
-- <a name="toc_grunthordeprototypelootname"></a>[GruntHorde.prototype.loot](#grunthordeprototypelootname)
+- <a name="toc_grunthordeprototypekillkey"></a>[GruntHorde.prototype.kill](#grunthordeprototypekillkey)
 - <a name="toc_grunthordeprototypelearnkey"></a>[GruntHorde.prototype.learn](#grunthordeprototypelearnkey)
+- <a name="toc_grunthordeprototypelootname"></a>[GruntHorde.prototype.loot](#grunthordeprototypelootname)
 - <a name="toc_grunthordeprototypedemandkey-val"></a>[GruntHorde.prototype.demand](#grunthordeprototypedemandkey-val)
 
 <a name="exports"></a>
@@ -108,6 +109,50 @@ Run all supported `grunt` configuration methods.
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
+# GruntHorde.prototype.kill(key)
+
+> Remove a top-level `grunt.config` property.
+
+**Usage:**
+
+```js
+horde.demand('x', 20);
+horde.kill('x');
+console.log(grunt.config.getRaw().x); // undefined
+console.log(horde.learn('x')); // undefined
+```
+
+**Parameters:**
+
+- `{string} key`
+
+**Return:**
+
+`{mixed}`
+
+<sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
+
+# GruntHorde.prototype.learn(key)
+
+> Get a raw `grunt.config` property. Supports `x.y.z` property paths.
+
+**Usage:**
+
+```js
+horde.demand('x.y.z', 20);
+horde.learn('x.y.z'); // 20
+```
+
+**Parameters:**
+
+- `{string} key`
+
+**Return:**
+
+`{mixed}`
+
+<sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
+
 # GruntHorde.prototype.loot(name)
 
 > Load a config module. Merge in its payload.
@@ -155,27 +200,6 @@ registerMultiTask.js
 **See:**
 
 - [Modules Documentation](modules.md)
-
-<sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
-
-# GruntHorde.prototype.learn(key)
-
-> Get a raw `grunt.config` property. Supports `x.y.z` property paths.
-
-**Usage:**
-
-```js
-horde.demand('x.y.z', 20);
-console.log(grunt.config.getRaw().x.y.z); // 20
-```
-
-**Parameters:**
-
-- `{string} key`
-
-**Return:**
-
-`{mixed}`
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 

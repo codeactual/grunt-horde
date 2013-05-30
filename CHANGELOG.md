@@ -1,9 +1,11 @@
 # 0.2.2
 
 * feat(event): Add `mode` argument to `grunt-horde:demand` event payload to indicate whether write was accepted
+* feat(api): Add `kill` to remove top-level keys
 * fix(loot): Throw error on no such dir
 * fix(attack): Gruntfile demand() could not override modules
 * fix(module): Let `learn` access k/v pairs added in prior `loot`
+* fix(module): Missing `return` value would overwrite existing with `undefined`
 
 # 0.2.1
 

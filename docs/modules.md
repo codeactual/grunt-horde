@@ -15,6 +15,11 @@
 - Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
 - Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
 
+## Module `return` values
+
+- You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
+- To removing a top-level config key, use [kill(key)](GruntHorde.md).
+
 ## Precedence
 
 [demand()](GruntHorde.md) can be called from `Gruntfile.js` and any module file, but its effectiveness depends where it is used.

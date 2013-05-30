@@ -35,7 +35,8 @@ describe('GruntHorde', function() {
 
     this.horde = gruntHorde.create(grunt);
 
-    this.key = 'x.y.z';
+    this.topLevelKey = 'x';
+    this.key = this.topLevelKey + '.y.z';
     this.val = 20;
     this.val2 = 21;
     this.keyValObj = {};
@@ -144,6 +145,10 @@ describe('GruntHorde', function() {
 
     it('should pass grunt as arg', function() {
       this.output.grunt.should.deep.equal(grunt);
+    });
+
+    it('should convert missing return value to empty object', function() {
+      this.horde.require(fixtureDir + '/debug-module/no-return.js').should.deep.equal({});
     });
   });
 
@@ -271,6 +276,15 @@ describe('GruntHorde', function() {
         index: {},
         categorized: {'non-index1': {c: 3}, 'non-index2': {d: 4}}
       });
+    });
+  });
+
+  describe('#kill', function() {
+    it('should delete a top-level key', function() {
+      this.horde.demand(this.key, this.val);
+      this.horde.kill(this.topLevelKey);
+      should.not.exist(grunt.config.getRaw()[this.topLevelKey]);
+      should.not.exist(this.horde.learn(this.topLevelKey));
     });
   });
 
