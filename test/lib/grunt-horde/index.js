@@ -236,6 +236,9 @@ describe('GruntHorde', function() {
       var processSpy = this.spy(grunt.template, 'process');
       context.t('txt', {a: 1});
       processSpy.should.have.been.calledWithExactly('txt', {a: 1});
+
+      context.kill(this.topLevelKey);
+      should.not.exist(this.horde.learn(this.topLevelKey));
     });
 
     it('should include demand bound to source', function(testDone) {

@@ -128,7 +128,7 @@ console.log(horde.learn('x')); // undefined
 
 **Return:**
 
-`{mixed}`
+`{object}` this
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 
