@@ -1,6 +1,7 @@
 # 0.2.2
 
 * fix(loot): Throw error on no such dir
+* fix(attack): Gruntfile demand() could not override modules
 
 # 0.2.1
 

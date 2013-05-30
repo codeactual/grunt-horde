@@ -2,6 +2,7 @@
 var sinon = require('sinon');
 var chai = require('chai');
 var fs = require('fs');
+var path = require('path');
 var util = require('util');
 var sprintf = util.format;
 var grunt = require('grunt');
@@ -104,6 +105,7 @@ describe('GruntHorde', function() {
   describe('#loot', function() {
     it('should merge in configs from dir', function() {
       var name = './rel/path/to/config/dir';
+      this.stub(shelljs, 'test').returns(true);
 
       this.stub = this.stub(this.horde, 'dirToConfigObj');
       this.stub.withArgs(name).returns({initConfig: {a: 'one', b: 2, c: ['x', 'y']}});
@@ -336,6 +338,27 @@ describe('GruntHorde', function() {
         this.gruntStub.registerMultiTask.should.have.been.calledTwice;
         this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('multi1', 'multi1 desc', sinon.match.func);
         this.gruntStub.registerMultiTask.should.have.been.calledWithExactly('multi2', 'multi2 desc', sinon.match.func);
+      });
+    });
+
+    describe('base config fixture with Gruntfile #demand', function() {
+      it('should give lower precedence to initConfig', function() {
+        this.horde
+          .loot(fixtureDir + '/base-config')
+          .demand('i2.i2k1', 'overwritten')
+          .attack();
+        this.gruntStub.initConfig.should.have.been.calledWithExactly({
+          i1: {i1k1: 'i1v1'},
+          i2: {i2k1: 'overwritten'},
+          plugin1: {
+            p1k1: {a: 1, b: 2},
+            p1k2: {c: 3, d: 4}
+          },
+          plugin2: {
+            p2k1: {a: 1, b: 2},
+            p2k2: {c: 3, d: 4}
+          }
+        });
       });
     });
 

@@ -15,6 +15,16 @@
 - Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
 - Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
 
+## Precedence
+
+[demand()](GruntHorde.md) can be called from `Gruntfile.js` and any module file, but its effectiveness depends where it is used.
+
+- Key/value pairs returned from modules loaded by `loot` (lowest)
+- Key/value pairs set by `demand()` in modules loaded by `loot`
+- Key/value pairs set by `demand()` in `Gruntfile.js` (highest)
+
+Remidner: Sequence your `loot` calls based on module precendence, highest last.
+
 # Module Files
 
 ## `initConfig/index.js`
