@@ -75,6 +75,9 @@ module.exports = function(grunt) {
   - `{object} loadTasks`
   - `{object} registerMultiTask`
   - `{object} registerTask`
+- `{object} frozenConfig` Track `config` keys set in `Gruntfile.js`
+  - Allow client project to override defaults set in modules.
+  - Keys: `config` key names, values: not used
 - `{string} [home=process.cwd]` Absolute path to project root dir w/out trailing slash
 - `{object} grunt` Instance injected into Gruntfile.js
 - `{array} lootBatch` Pending merge functions collected in Gruntfile.prototype.loot

@@ -37,6 +37,7 @@ describe('GruntHorde', function() {
 
     this.key = 'x.y.z';
     this.val = 20;
+    this.val2 = 21;
     this.keyValObj = {};
     teaProp.set(this.keyValObj, this.key, this.val);
     this.config = {iAmA: 'fake config obj'};
@@ -283,22 +284,62 @@ describe('GruntHorde', function() {
 
     it('should emit event', function(testDone) {
       var self = this;
-      grunt.event.once('grunt-horde:demand', function(source, key, val) {
+      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
         source.should.equal('Gruntfile');
         key.should.equal(self.key);
         val.should.equal(self.val);
+        mode.should.equal('freezing');
         testDone();
       });
       this.horde.demand(this.key, this.val);
     });
   });
 
+  describe('#configuredDemand', function() {
+    it('should prevent modules from updating Gruntfile value', function() {
+      this.horde.configuredDemand('Gruntfile', this.horde, this.key, this.val);
+      this.horde.learn(this.key).should.equal(this.val);
+      this.horde.configuredDemand(this.modPath, this.horde, this.key, this.val2);
+      this.horde.learn(this.key).should.equal(this.val);
+    });
+
+    it('should let Gruntfile update value again', function() {
+      this.horde.configuredDemand('Gruntfile', this.horde, this.key, this.val);
+      this.horde.learn(this.key).should.equal(this.val);
+      this.horde.configuredDemand('Gruntfile', this.horde, this.key, this.val2);
+      this.horde.learn(this.key).should.equal(this.val2);
+    });
+
+    it('should emit mode when value set by module', function(testDone) {
+      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+        mode.should.equal('');
+        testDone();
+      });
+      this.horde.configuredDemand(this.modPath, this.horde, this.key, this.val);
+    });
+
+    it('should emit mode when value set by Gruntfile', function(testDone) {
+      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+        mode.should.equal('freezing');
+        testDone();
+      });
+      this.horde.demand(this.key, this.val);
+    });
+
+    it('should emit mode when value already frozen', function(testDone) {
+      this.horde.demand(this.key, this.val);
+      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+        mode.should.equal('frozen');
+        testDone();
+      });
+      this.horde.configuredDemand(this.modPath, this.horde, this.key, this.val);
+    });
+  });
+
   describe('#integration', function() {
     describe('base config fixture', function() {
       beforeEach(function() {
-        this.horde
-          .loot(fixtureDir + '/base-config')
-          .attack();
+        this.horde.loot(fixtureDir + '/base-config').attack();
       });
 
       it('should init config', function() {

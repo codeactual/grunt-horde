@@ -129,10 +129,15 @@ Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.
 
 ## `grunt-horde:demand`
 
-> Fires on every `set()` invocation.
+> Fires on every `demand()` invocation.
 
 Receives arguments:
 
 - `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} val` Config val, ex. `20`
+- `{string} mode`
+  - `''`: initial/updated value from module was accepted
+  - `frozen`: new value from module was denied (already set by `Gruntfile.js`)
+  - `freezing`: initial/updated value from`Gruntfile.js`
+
