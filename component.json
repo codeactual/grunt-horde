@@ -2,7 +2,7 @@
   "name": "grunt-horde",
   "repo": "codeactual/grunt-horde",
   "description": "Packageable grunt configuration modules",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "keywords": [
     "grunt",
     "task",
