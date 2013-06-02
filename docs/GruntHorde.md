@@ -111,7 +111,7 @@ Run all supported `grunt` configuration methods.
 
 # GruntHorde.prototype.kill(key)
 
-> Remove a configuration property.
+> Remove a configuration property. Supports `x.y.z` property paths.
 
 **Usage:**
 
@@ -125,7 +125,7 @@ console.log(horde.learn('initConfig.x')); // undefined
 **Parameters:**
 
 - `{string} key` &lt;section&gt;.&lt;key&gt;
-  - Ex. `initConfig.pkg`, `registerTask.default`, etc.
+  - Ex. `initConfig.x.y.z`, `registerTask.default`, etc.
   - Sections: initConfig, loadNpmTasks, loadTasks, registerTask, registerMultiTask
 
 **Return:**
@@ -148,7 +148,7 @@ horde.learn('initConfig.x.y.z'); // 20
 **Parameters:**
 
 - `{string} key` &lt;section&gt;.&lt;key&gt;
-  - Ex. `initConfig.pkg`, `registerTask.default`, etc.
+  - Ex. `initConfig.x.y.z`, `registerTask.default`, etc.
   - Sections: initConfig, loadNpmTasks, loadTasks, registerTask, registerMultiTask
 
 **Return:**
@@ -226,7 +226,7 @@ console.log(grunt.config.getRaw().x.y.z); // 20
 **Parameters:**
 
 - `{string} key` &lt;section&gt;.&lt;key&gt;
-  - Ex. `initConfig.pkg`, `registerTask.default`, etc.
+  - Ex. `initConfig.x.y.z`, `registerTask.default`, etc.
   - Sections: initConfig, loadNpmTasks, loadTasks, registerTask, registerMultiTask
 
 - `{mixed} val`
