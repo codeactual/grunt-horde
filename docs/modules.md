@@ -155,3 +155,16 @@ Receives arguments:
   - `frozen`: new value from module was denied (already set by `Gruntfile.js`)
   - `freezing`: initial/updated value from`Gruntfile.js`
 
+## `grunt-horde:kill`
+
+> Fires on every `kill()` invocation.
+
+Receives arguments:
+
+- `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
+- `{string} key` Config key, ex. `x.y.z`
+- `{string} mode`
+  - `''`: initial/updated value from module was accepted
+  - `frozen`: new value from module was denied (already set by `Gruntfile.js`)
+  - `freezing`: initial/updated value from`Gruntfile.js`
+

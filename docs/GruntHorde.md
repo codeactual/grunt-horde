@@ -122,6 +122,10 @@ console.log(grunt.config.getRaw().x); // undefined
 console.log(horde.learn('initConfig.x')); // undefined
 ```
 
+**Emits:**
+
+- `grunt-horde:kill` on every invocation.
+
 **Parameters:**
 
 - `{string} key` &lt;section&gt;.&lt;key&gt;
@@ -131,6 +135,10 @@ console.log(horde.learn('initConfig.x')); // undefined
 **Return:**
 
 `{object}` this
+
+**See:**
+
+- [Events](modules.md#events)
 
 <sub>Go: [TOC](#tableofcontents) | [GruntHorde.prototype](#toc_grunthordeprototype)</sub>
 

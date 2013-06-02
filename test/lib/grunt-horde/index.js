@@ -291,6 +291,7 @@ describe('GruntHorde', function() {
       this.horde.demand(this.initKey, this.val);
       this.horde.kill('initConfig');
       this.horde.learn('initConfig').should.deep.equal({});
+      this.horde.config.initConfig.should.deep.equal({});
       should.not.exist(this.horde.learn(this.initKey));
     });
 
