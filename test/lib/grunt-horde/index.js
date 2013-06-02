@@ -47,7 +47,8 @@ describe('GruntHorde', function() {
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
     this.modDirPath = '/path/to/nowhere';
-    this.modFilePath = '/path/to/nowhere/initConfig/jshint.js';
+    this.modInitFile = '/path/to/nowhere/initConfig/jshint.js';
+    this.modNonInitFile = '/path/to/nowhere/' + this.nonInitSection + '.js';
     this.gruntStub = this.stub(grunt);
   });
 
@@ -230,7 +231,7 @@ describe('GruntHorde', function() {
 
   describe('#createModuleContext', function() {
     it('should include expected properties', function() {
-      var context = this.horde.createModuleContext(this.modFilePath);
+      var context = this.horde.createModuleContext(this.modInitFile);
       var config = grunt.config.getRaw();
 
       var setSpy = this.spy(teaProp, 'set');
@@ -251,9 +252,9 @@ describe('GruntHorde', function() {
 
     it('should include #demand bound to source', function(testDone) {
       var self = this;
-      var context = this.horde.createModuleContext(this.modFilePath);
+      var context = this.horde.createModuleContext(this.modInitFile);
       grunt.event.once('grunt-horde:demand', function(source, section, key, val) {
-        source.should.equal(self.modFilePath);
+        source.should.equal(self.modInitFile);
         section.should.equal('initConfig');
         key.should.equal(self.sectionKey);
         val.should.equal(self.val);
@@ -264,15 +265,26 @@ describe('GruntHorde', function() {
 
     it('should include #kill bound to source', function(testDone) {
       var self = this;
-      var context = this.horde.createModuleContext(this.modFilePath);
+      var context = this.horde.createModuleContext(this.modInitFile);
       grunt.event.once('grunt-horde:kill', function(source, section, key) {
-        source.should.equal(self.modFilePath);
+        source.should.equal(self.modInitFile);
         section.should.equal('initConfig');
         key.should.equal(self.sectionKey);
         testDone();
       });
       context.kill(this.initKey);
     });
+
+    it('should emit non-initConfig section', function(testDone) {
+      var self = this;
+      var context = this.horde.createModuleContext(this.modNonInitFile);
+      grunt.event.once('grunt-horde:kill', function(source, section) {
+        section.should.equal(self.nonInitSection);
+        testDone();
+      });
+      context.kill(this.initKey);
+    });
+
   });
 
   describe('#reduceDirToConfig', function() {
