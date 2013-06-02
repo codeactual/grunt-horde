@@ -271,7 +271,7 @@ describe('GruntHorde', function() {
         key.should.equal(self.sectionKey);
         testDone();
       });
-      context.kill(this.initKey, this.val);
+      context.kill(this.initKey);
     });
   });
 
@@ -331,6 +331,42 @@ describe('GruntHorde', function() {
       this.horde.kill(this.nonInitKey);
       should.exist(this.horde.learn(this.nonInitSection));
       should.not.exist(this.horde.learn(this.nonInitKey));
+    });
+
+    it('should emit event', function(testDone) {
+      var self = this;
+      grunt.event.once('grunt-horde:kill', function(source, section, key) {
+        source.should.equal('Gruntfile');
+        section.should.equal('initConfig');
+        key.should.equal(self.sectionKey);
+        testDone();
+      });
+      this.horde.kill(this.initKey);
+    });
+
+    it('should emit mode when value set by module', function(testDone) {
+      grunt.event.once('grunt-horde:kill', function(source, section, key, mode) {
+        mode.should.equal('');
+        testDone();
+      });
+      this.horde.configuredKill(this.modDirPath, this.horde, 'initConfig', this.sectionKey);
+    });
+
+    it('should emit mode when value set by Gruntfile', function(testDone) {
+      grunt.event.once('grunt-horde:kill', function(source, section, key, mode) {
+        mode.should.equal('freezing');
+        testDone();
+      });
+      this.horde.kill(this.initKey);
+    });
+
+    it('should emit mode when value already frozen', function(testDone) {
+      this.horde.kill(this.initKey, this.val);
+      grunt.event.once('grunt-horde:kill', function(source, section, key, mode) {
+        mode.should.equal('frozen');
+        testDone();
+      });
+      this.horde.configuredKill(this.modDirPath, this.horde, 'initConfig', this.sectionKey);
     });
   });
 

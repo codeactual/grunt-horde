@@ -152,8 +152,8 @@ Receives arguments:
 - `{string} val` Config val, ex. `20`
 - `{string} mode`
   - `''`: initial/updated value from module was accepted
-  - `frozen`: new value from module was denied (already set by `Gruntfile.js`)
-  - `freezing`: initial/updated value from`Gruntfile.js`
+  - `frozen`: new value from module was denied (already odified by `Gruntfile.js`)
+  - `freezing`: value modified from `Gruntfile.js`
 
 ## `grunt-horde:kill`
 
@@ -165,6 +165,6 @@ Receives arguments:
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} mode`
   - `''`: initial/updated value from module was accepted
-  - `frozen`: new value from module was denied (already set by `Gruntfile.js`)
-  - `freezing`: initial/updated value from`Gruntfile.js`
+  - `frozen`: new value from module was denied (already modified by `Gruntfile.js`)
+  - `freezing`: value modified from `Gruntfile.js`
 
