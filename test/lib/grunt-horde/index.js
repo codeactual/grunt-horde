@@ -51,6 +51,11 @@ describe('GruntHorde', function() {
     this.gruntStub = this.stub(grunt);
   });
 
+  afterEach(function() {
+    grunt.event.removeAllListeners('grunt-horde:demand');
+    grunt.event.removeAllListeners('grunt-horde:kill');
+  });
+
   describe('#attack', function() {
     it('should init config', function() {
       var expected = {iAmA: 'fake init config'};
@@ -246,15 +251,27 @@ describe('GruntHorde', function() {
 
     it('should include #demand bound to source', function(testDone) {
       var self = this;
-      var context = this.horde.createModuleContext(this.modDirPath);
+      var context = this.horde.createModuleContext(this.modFilePath);
       grunt.event.once('grunt-horde:demand', function(source, section, key, val) {
-        source.should.equal(self.modDirPath);
-        section.should.equal('nowhere');
+        source.should.equal(self.modFilePath);
+        section.should.equal('initConfig');
         key.should.equal(self.sectionKey);
         val.should.equal(self.val);
         testDone();
       });
-      context.demand(this.sectionKey, this.val);
+      context.demand(this.initKey, this.val);
+    });
+
+    it('should include #kill bound to source', function(testDone) {
+      var self = this;
+      var context = this.horde.createModuleContext(this.modFilePath);
+      grunt.event.once('grunt-horde:kill', function(source, section, key) {
+        source.should.equal(self.modFilePath);
+        section.should.equal('initConfig');
+        key.should.equal(self.sectionKey);
+        testDone();
+      });
+      context.kill(this.initKey, this.val);
     });
   });
 
