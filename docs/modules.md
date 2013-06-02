@@ -32,11 +32,11 @@ Remidner: Sequence your `loot` calls based on module precendence, highest last.
 
 ## Use `learn/demand` to merge with existing value, rather than a last-wins overwrite
 
-If `loot` has already loaded `moduleX` that defined key `dev.logs`, `moduleY` could include this:
+If `loot` has already loaded `moduleX` that defined `initConfig` key `dev.logs`, `moduleY` could include this:
 
 ```js
-var orig = this.learn('dev.logs');
-this.demand('dev.logs', orig.concat('tmp/request.log'));
+var orig = this.learn('initConfig.dev.logs');
+this.demand('initConfig.dev.logs', orig.concat('tmp/request.log'));
 ```
 
 # Module Files
@@ -148,6 +148,7 @@ Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.
 Receives arguments:
 
 - `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
+- `{string} section` Ex. `initConfig`, `registerTask`, etc.
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} val` Config val, ex. `20`
 - `{string} mode`
@@ -162,6 +163,7 @@ Receives arguments:
 Receives arguments:
 
 - `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
+- `{string} section` Ex. `initConfig`, `registerTask`, etc.
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} mode`
   - `''`: initial/updated value from module was accepted
