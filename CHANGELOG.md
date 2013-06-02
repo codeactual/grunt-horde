@@ -1,3 +1,9 @@
+# 0.3.0
+
+* feat(api): Expose all config sections to `demand`, `learn`, `kill` in all files.
+* feat(api): Allow `kill` to any key, not just top-level.
+* feat(event): Add `section` argument to `grunt-horde:demand` payload.
+
 # 0.2.2
 
 * feat(event): Add `mode` argument to `grunt-horde:demand` event payload to indicate whether write was accepted

@@ -111,20 +111,22 @@ Run all supported `grunt` configuration methods.
 
 # GruntHorde.prototype.kill(key)
 
-> Remove a top-level `grunt.config` property.
+> Remove a configuration property.
 
 **Usage:**
 
 ```js
-horde.demand('x', 20);
-horde.kill('x');
+horde.demand('initConfig.x', 20);
+horde.kill('initConfig.x');
 console.log(grunt.config.getRaw().x); // undefined
-console.log(horde.learn('x')); // undefined
+console.log(horde.learn('initConfig.x')); // undefined
 ```
 
 **Parameters:**
 
-- `{string} key`
+- `{string} key` &lt;section&gt;.&lt;key&gt;
+  - Ex. `initConfig.pkg`, `registerTask.default`, etc.
+  - Sections: initConfig, loadNpmTasks, loadTasks, registerTask, registerMultiTask
 
 **Return:**
 
@@ -134,18 +136,20 @@ console.log(horde.learn('x')); // undefined
 
 # GruntHorde.prototype.learn(key)
 
-> Get a raw `grunt.config` property. Supports `x.y.z` property paths.
+> Get a configuration property. Supports `x.y.z` property paths.
 
 **Usage:**
 
 ```js
-horde.demand('x.y.z', 20);
-horde.learn('x.y.z'); // 20
+horde.demand('initConfig.x.y.z', 20);
+horde.learn('initConfig.x.y.z'); // 20
 ```
 
 **Parameters:**
 
-- `{string} key`
+- `{string} key` &lt;section&gt;.&lt;key&gt;
+  - Ex. `initConfig.pkg`, `registerTask.default`, etc.
+  - Sections: initConfig, loadNpmTasks, loadTasks, registerTask, registerMultiTask
 
 **Return:**
 
@@ -205,7 +209,7 @@ registerMultiTask.js
 
 # GruntHorde.prototype.demand(key, val)
 
-> Set a raw `grunt.config` property. Supports `x.y.z` property paths.
+> Set a configuration property. Supports `x.y.z` property paths.
 
 **Usage:**
 
@@ -221,7 +225,10 @@ console.log(grunt.config.getRaw().x.y.z); // 20
 
 **Parameters:**
 
-- `{string} key`
+- `{string} key` &lt;section&gt;.&lt;key&gt;
+  - Ex. `initConfig.pkg`, `registerTask.default`, etc.
+  - Sections: initConfig, loadNpmTasks, loadTasks, registerTask, registerMultiTask
+
 - `{mixed} val`
 
 **Return:**

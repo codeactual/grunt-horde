@@ -35,16 +35,19 @@ describe('GruntHorde', function() {
 
     this.horde = gruntHorde.create(grunt);
 
-    this.topLevelKey = 'x';
-    this.key = this.topLevelKey + '.y.z';
+    this.topLevelKey = 'initConfig';
+    this.topLevelSectionKey = 'x';
+    this.sectionKey = this.topLevelSectionKey + '.y.z';
+    this.key = this.topLevelKey + '.' + this.sectionKey;
     this.val = 20;
     this.val2 = 21;
     this.keyValObj = {};
-    teaProp.set(this.keyValObj, this.key, this.val);
+    teaProp.set(this.keyValObj, this.sectionKey, this.val);
     this.config = {iAmA: 'fake config obj'};
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
-    this.modPath = '/path/to/nowhere';
+    this.modDirPath = '/path/to/nowhere';
+    this.modFilePath = '/path/to/nowhere/initConfig/jshint.js';
     this.gruntStub = this.stub(grunt);
   });
 
@@ -161,14 +164,14 @@ describe('GruntHorde', function() {
     });
 
     it('should return loaded config if exists', function() {
-      this.stubFile(this.modPath).make();
+      this.stubFile(this.modDirPath).make();
       var stub = this.stub(this.horde, 'require');
-      stub.withArgs(this.modPath).returns(this.config);
-      this.horde.requireIfExists(this.modPath).should.deep.equal(this.config);
+      stub.withArgs(this.modDirPath).returns(this.config);
+      this.horde.requireIfExists(this.modDirPath).should.deep.equal(this.config);
     });
 
     it('should return empty config if absent', function() {
-      this.horde.requireIfExists(this.modPath).should.deep.equal({});
+      this.horde.requireIfExists(this.modDirPath).should.deep.equal({});
     });
   });
 
@@ -177,7 +180,7 @@ describe('GruntHorde', function() {
       // Fake dir scan
       this.files = ['index.js', 'jshint.js'];
       this.lsStub = this.stub(shelljs, 'ls');
-      this.lsStub.withArgs(this.modPath + '/*.js').returns(this.files);
+      this.lsStub.withArgs(this.modDirPath + '/*.js').returns(this.files);
 
       // Fake dir-to-config-obj conversion
       this.reduceOut = {
@@ -192,7 +195,7 @@ describe('GruntHorde', function() {
       this.reduceStub.withArgs(this.reduceFn, sinon.match.object).returns(this.reduceOut);
 
       // Use above stubs to verify expected steps
-      this.output = this.horde.requireDir(this.modPath);
+      this.output = this.horde.requireDir(this.modDirPath);
     });
 
     it('should merge collected configs', function() {
@@ -209,48 +212,49 @@ describe('GruntHorde', function() {
     });
 
     it('should return loaded config if exists', function() {
-      this.stubFile(this.modPath).readdir(['child']).make();
+      this.stubFile(this.modDirPath).readdir(['child']).make();
       var stub = this.stub(this.horde, 'requireDir');
-      stub.withArgs(this.modPath).returns(this.config);
-      this.horde.requireDirIfExists(this.modPath).should.deep.equal(this.config);
+      stub.withArgs(this.modDirPath).returns(this.config);
+      this.horde.requireDirIfExists(this.modDirPath).should.deep.equal(this.config);
     });
 
     it('should return empty config if absent', function() {
-      this.horde.requireIfExists(this.modPath).should.deep.equal({});
+      this.horde.requireIfExists(this.modDirPath).should.deep.equal({});
     });
   });
 
   describe('#createModuleContext', function() {
     it('should include expected properties', function() {
-      var context = this.horde.createModuleContext();
+      var context = this.horde.createModuleContext(this.modFilePath);
       var config = grunt.config.getRaw();
 
       var setSpy = this.spy(teaProp, 'set');
       context.demand(this.key, this.val);
-      setSpy.should.have.been.calledWithExactly(config, this.key, this.val);
+      setSpy.should.have.been.calledWithExactly(config, this.sectionKey, this.val);
 
       var getSpy = this.spy(teaProp, 'get');
       context.learn(this.key).should.equal(this.val);
-      getSpy.should.have.been.calledWithExactly(config, this.key);
+      getSpy.should.have.been.calledWithExactly(config, this.sectionKey);
 
       var processSpy = this.spy(grunt.template, 'process');
       context.t('txt', {a: 1});
       processSpy.should.have.been.calledWithExactly('txt', {a: 1});
 
-      context.kill(this.topLevelKey);
-      should.not.exist(this.horde.learn(this.topLevelKey));
+      context.kill(this.key);
+      should.not.exist(context.learn(this.key));
     });
 
-    it('should include demand bound to source', function(testDone) {
+    it('should include #demand bound to source', function(testDone) {
       var self = this;
-      var context = this.horde.createModuleContext(this.modPath);
-      grunt.event.once('grunt-horde:demand', function(source, key, val) {
-        source.should.equal(self.modPath);
-        key.should.equal(self.key);
+      var context = this.horde.createModuleContext(this.modDirPath);
+      grunt.event.once('grunt-horde:demand', function(source, section, key, val) {
+        source.should.equal(self.modDirPath);
+        section.should.equal('nowhere');
+        key.should.equal(self.sectionKey);
         val.should.equal(self.val);
         testDone();
       });
-      context.demand(this.key, this.val);
+      context.demand(this.sectionKey, this.val);
     });
   });
 
@@ -286,8 +290,15 @@ describe('GruntHorde', function() {
     it('should delete a top-level key', function() {
       this.horde.demand(this.key, this.val);
       this.horde.kill(this.topLevelKey);
-      should.not.exist(grunt.config.getRaw()[this.topLevelKey]);
-      should.not.exist(this.horde.learn(this.topLevelKey));
+      this.horde.learn(this.topLevelKey).should.deep.equal({});
+      should.not.exist(this.horde.learn(this.key));
+    });
+
+    it('should delete a sub-level key', function() {
+      this.horde.demand(this.key, this.val);
+      this.horde.kill(this.key);
+      should.exist(this.topLevelKey);
+      should.not.exist(this.horde.learn(this.key));
     });
   });
 
@@ -301,9 +312,10 @@ describe('GruntHorde', function() {
 
     it('should emit event', function(testDone) {
       var self = this;
-      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+      grunt.event.once('grunt-horde:demand', function(source, section, key, val, mode) {
         source.should.equal('Gruntfile');
-        key.should.equal(self.key);
+        section.should.equal('initConfig');
+        key.should.equal(self.sectionKey);
         val.should.equal(self.val);
         mode.should.equal('freezing');
         testDone();
@@ -314,29 +326,29 @@ describe('GruntHorde', function() {
 
   describe('#configuredDemand', function() {
     it('should prevent modules from updating Gruntfile value', function() {
-      this.horde.configuredDemand('Gruntfile', this.horde, this.key, this.val);
+      this.horde.configuredDemand('Gruntfile', this.horde, this.topLevelKey, this.sectionKey, this.val);
       this.horde.learn(this.key).should.equal(this.val);
-      this.horde.configuredDemand(this.modPath, this.horde, this.key, this.val2);
+      this.horde.configuredDemand(this.modDirPath, this.horde, this.topLevelKey, this.sectionKey, this.val2);
       this.horde.learn(this.key).should.equal(this.val);
     });
 
     it('should let Gruntfile update value again', function() {
-      this.horde.configuredDemand('Gruntfile', this.horde, this.key, this.val);
+      this.horde.configuredDemand('Gruntfile', this.horde, this.topLevelKey, this.sectionKey, this.val);
       this.horde.learn(this.key).should.equal(this.val);
-      this.horde.configuredDemand('Gruntfile', this.horde, this.key, this.val2);
+      this.horde.configuredDemand('Gruntfile', this.horde, this.topLevelKey, this.sectionKey, this.val2);
       this.horde.learn(this.key).should.equal(this.val2);
     });
 
     it('should emit mode when value set by module', function(testDone) {
-      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+      grunt.event.once('grunt-horde:demand', function(source, section, key, val, mode) {
         mode.should.equal('');
         testDone();
       });
-      this.horde.configuredDemand(this.modPath, this.horde, this.key, this.val);
+      this.horde.configuredDemand(this.modDirPath, this.horde, this.topLevelKey, this.sectionKey, this.val);
     });
 
     it('should emit mode when value set by Gruntfile', function(testDone) {
-      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+      grunt.event.once('grunt-horde:demand', function(source, section, key, val, mode) {
         mode.should.equal('freezing');
         testDone();
       });
@@ -345,11 +357,11 @@ describe('GruntHorde', function() {
 
     it('should emit mode when value already frozen', function(testDone) {
       this.horde.demand(this.key, this.val);
-      grunt.event.once('grunt-horde:demand', function(source, key, val, mode) {
+      grunt.event.once('grunt-horde:demand', function(source, section, key, val, mode) {
         mode.should.equal('frozen');
         testDone();
       });
-      this.horde.configuredDemand(this.modPath, this.horde, this.key, this.val);
+      this.horde.configuredDemand(this.modDirPath, this.horde, this.topLevelKey, this.sectionKey, this.val);
     });
   });
 
@@ -403,7 +415,7 @@ describe('GruntHorde', function() {
       it('should give lower precedence to initConfig', function() {
         this.horde
           .loot(fixtureDir + '/base-config')
-          .demand('i2.i2k1', 'overwritten')
+          .demand('initConfig.i2.i2k1', 'overwritten')
           .attack();
         this.gruntStub.initConfig.should.have.been.calledWithExactly({
           i1: {i1k1: 'i1v1'},
