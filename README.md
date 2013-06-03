@@ -63,8 +63,8 @@ Defines project-specific configs merged recursively over `my-base-config`.
 
 ## Documentation
 
-[Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
-[API](docs/GruntHorde.md)
+- [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
+- [API](docs/GruntHorde.md)
 
 ## License
 
