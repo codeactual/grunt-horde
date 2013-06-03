@@ -6,6 +6,8 @@ Packageable grunt configuration modules
 - Separate files define values for `initConfig`, `loadNpmTask`, etc.
 - Recursively merge configuration values collected from any number of modules/directories.
 
+[Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
+
 [![Build Status](https://travis-ci.org/codeactual/grunt-horde.png)](https://travis-ci.org/codeactual/grunt-horde)
 
 ## Example
@@ -59,9 +61,10 @@ Defines project-specific configs merged recursively over `my-base-config`.
 
     npm install grunt-horde
 
-## API
+## Documentation
 
-[Documentation](docs/GruntHorde.md)
+[Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
+[API](docs/GruntHorde.md)
 
 ## License
 
