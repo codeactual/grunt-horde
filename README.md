@@ -2,9 +2,9 @@
 
 Packageable grunt configuration modules
 
-- Store configuration files in NPM modules or plain directories.
 - Separate files define values for `initConfig`, `loadNpmTask`, etc.
-- Recursively merge configuration values collected from any number of modules/directories.
+- Store modules in regular directories or leverage NPM, ex. `npm install git://`.
+- Compose configuration from multiple modules w/ recursive merging, cascading, etc.
 
 [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
 
