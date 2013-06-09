@@ -114,17 +114,30 @@ describe('GruntHorde', function() {
   });
 
   describe('#loot', function() {
+    beforeEach(function() {
+      this.dir = './rel/path/to/config/dir';
+      this.dirToConfigObjStub = this.stub(this.horde, 'dirToConfigObj');
+      this.stubTree(this.horde.resolveRequire(this.dir) + '/');
+    });
+
     it('should merge in configs from dir', function() {
-      var name = './rel/path/to/config/dir';
-      this.stub(shelljs, 'test').returns(true);
-
-      this.stub = this.stub(this.horde, 'dirToConfigObj');
-      this.stub.withArgs(name).returns({initConfig: {a: 'one', b: 2, c: ['x', 'y']}});
-
+      this.dirToConfigObjStub
+        .withArgs(this.dir)
+        .returns({initConfig: {a: 'one', b: 2, c: ['x', 'y']}});
       this.horde.config.initConfig = {a: 1, b: 'two', c: ['z'], d: 4};
-      this.horde.loot(name);
+      this.horde.loot(this.dir);
       this.horde.attack();
       this.horde.config.initConfig.should.deep.equal({a: 'one', b: 2, c: ['x', 'y'], d: 4});
+    });
+
+    it('should load tasks dir if present', function() {
+      var taskFile = this.horde.resolveRequire(this.dir + '/tasks/tasks-1.js');
+      var expected = {};
+      expected[path.dirname(taskFile)] = true;
+      this.stubTree(taskFile);
+      this.horde.loot(this.dir);
+      this.horde.attack();
+      this.horde.config.loadTasks.should.deep.equal(expected);
     });
   });
 
