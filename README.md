@@ -37,6 +37,8 @@ Loaded first, this module provides a baseline that later `loot` calls can update
         index.js
         jshint.js
         shell.js
+    tasks/
+        precommit.js
     loadNpmTasks.js
     loadTasks.js
     registerTask.js
