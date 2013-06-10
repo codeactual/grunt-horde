@@ -171,7 +171,7 @@ horde.learn('initConfig.x.y.z'); // 20
 
 - Merge operation is deferred until [GruntHorde.prototype.attack](#grunthordeprototypeattack).
 - Payloads are merged recursively, last wins.
-- Queues `tasks/`, if present, with `grunt.loadTasks`.
+- Loads `tasks/`, if present, with `grunt.loadTasks`.
 
 **Supported module types:**
 

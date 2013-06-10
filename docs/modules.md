@@ -5,6 +5,7 @@
 - May be used to load any number of modules.
 - Payloads collected [merged recursively](https://github.com/pluma/assimilate), last wins.
 - Layout and content of module files must follow [conventions](#module-files).
+- Loads `tasks/`, if present, with `grunt.loadTasks`.
 
 # Variables
 
@@ -69,6 +70,10 @@ module.exports = function(grunt) {
 };
 
 ```
+
+## `tasks/<name>.js`, ex. `tasks/precommit.js`
+
+> Defines a module that will be discovered/loaded by `grunt.loadTasks`.
 
 ## `loadNpmTasks.js`
 
