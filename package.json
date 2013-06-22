@@ -50,5 +50,8 @@
     "originSha": "3cc07b1e77",
     "originUrl": "git.com:codeactual/gitemplate-node-lib.git"
   },
-  "author": "David Smith <codeactual@gmail.com>"
+  "author": "David Smith <codeactual@gmail.com>",
+  "devdir-ci": {
+    "version": 1
+  }
 }
