@@ -20,7 +20,7 @@ Packageable grunt configuration modules
 
 ```js
 module.exports = function(grunt) {
-  var horde = GruntHorde.create();
+  var horde = require('grunt-horde').create(grunt);
   horde
     .loot('my-base-config')
     .loot('./config/grunt')
