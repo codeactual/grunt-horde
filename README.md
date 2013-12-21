@@ -2,19 +2,21 @@
 
 Packageable grunt configuration modules
 
-- Separate files define values for `initConfig`, `loadNpmTask`, etc.
+- Separate files define `grunt` configuration sections like [initConfig](http://gruntjs.com/api/grunt#grunt.initconfig), [loadNpmTasks](http://gruntjs.com/api/grunt#grunt.loadnpmtasks), etc.
 - Store modules in regular directories or leverage NPM, ex. `npm install git://`.
 - Compose configuration from multiple modules w/ recursive merging, cascading, etc.
 
-[Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
-
 [![Build Status](https://travis-ci.org/codeactual/grunt-horde.png)](https://travis-ci.org/codeactual/grunt-horde)
+
+## [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
 
 ## Example
 
 ### `Gruntfile.js`
 
-- `loot` selects configuration modules whose payloads are marged recursively.
+Available API:
+
+- `loot` selects standard node modules whose `exports` are marged recursively.
 - `demand` updates the raw `grunt` config object.
 - `attack` applies the configuration to `grunt`.
 
@@ -24,7 +26,7 @@ module.exports = function(grunt) {
   horde
     .loot('my-base-config')
     .loot('./config/grunt')
-    .demand('pkg', grunt.file.readJSON('package.json'))
+    .demand('initConfig.jshint.options', {node: true})
     .attack();
 };
 ```
@@ -51,7 +53,7 @@ Loaded first, this module provides a baseline that later `loot` calls can update
 Defines project-specific configs merged recursively over `my-base-config`.
 
     initConfig/
-        uglify.js
+        jshint.js
     loadNpmTasks.js
     registerTask.js
 
