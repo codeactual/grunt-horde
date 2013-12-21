@@ -420,6 +420,14 @@ describe('GruntHorde', function() {
       });
       this.horde.demand(this.initKey, this.val);
     });
+
+    it('should detect invalid key namespace', function(testDone) {
+      var self = this;
+      (function() {
+        self.horde.demand('config', {key: 'value'});
+      }).should.Throw(Error, '"config" does not exist');
+      testDone();
+    });
   });
 
   describe('#configuredDemand', function() {
