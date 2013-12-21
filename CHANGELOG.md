@@ -1,3 +1,9 @@
+# 0.3.2
+
+- fix(docs): Corrections
+- fix(demand): Throw on invalid key namespace
+- chore(npm): Update deps
+
 # 0.3.1
 
 - feat(api): Auto-run `grunt.loadTasks` on a module's `tasks/` directory, if present.

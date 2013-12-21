@@ -11,10 +11,14 @@
             throw err;
         }
         var module = require.modules[resolved];
-        if (!module.exports) {
-            module.exports = {};
-            module.client = module.component = true;
-            module.call(this, module.exports, require.relative(resolved), module);
+        if (!module._resolving && !module.exports) {
+            var mod = {};
+            mod.exports = {};
+            mod.client = mod.component = true;
+            module._resolving = true;
+            module.call(this, mod.exports, require.relative(resolved), mod);
+            delete module._resolving;
+            module.exports = mod.exports;
         }
         return module.exports;
     }
