@@ -49,11 +49,11 @@ module.exports = function(grunt) {
       options: {
         failOnError: true
       },
-      build: {
-        command: 'component install --dev && component build --standalone gruntHorde --name grunt-horde --out dist --dev'
+      install: {
+        command: 'component install'
       },
       dist: {
-        command: 'component build --standalone gruntHorde --name grunt-horde --out dist'
+        command: 'component build --umd --name grunt-horde --out dist'
       },
       test_lib: {
         options: mochaShelljsOpt,
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['jshint']);
   grunt.registerTask('dox', ['shell:dox_lib']);
-  grunt.registerTask('build', ['default', 'shell:build']);
+  grunt.registerTask('build', ['default', 'shell:dist']);
   grunt.registerTask('dist', ['default', 'shell:dist', 'uglify:dist', 'dox']);
   grunt.registerTask('test', ['build', 'shell:test_lib']);
 };

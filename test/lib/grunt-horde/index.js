@@ -9,7 +9,7 @@ var grunt = require('grunt');
 var shelljs = require('shelljs');
 
 var should = chai.should();
-chai.Assertion.includeStack = true;
+chai.config.includeStack = true;
 chai.use(require('sinon-chai'));
 
 var gruntHorde = require('../../..');

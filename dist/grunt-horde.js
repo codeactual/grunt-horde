@@ -1,90 +1,50 @@
 (function() {
-    function require(path, parent, orig) {
-        var resolved = require.resolve(path);
-        if (null == resolved) {
-            orig = orig || path;
-            parent = parent || "root";
-            var err = new Error('Failed to require "' + orig + '" from "' + parent + '"');
-            err.path = orig;
-            err.parent = parent;
-            err.require = true;
-            throw err;
-        }
-        var module = require.modules[resolved];
-        if (!module._resolving && !module.exports) {
-            var mod = {};
-            mod.exports = {};
-            mod.client = mod.component = true;
-            module._resolving = true;
-            module.call(this, mod.exports, require.relative(resolved), mod);
-            delete module._resolving;
-            module.exports = mod.exports;
+    function require(name) {
+        var module = require.modules[name];
+        if (!module) throw new Error('failed to require "' + name + '"');
+        if (!("exports" in module) && typeof module.definition === "function") {
+            module.client = module.component = true;
+            module.definition.call(this, module.exports = {}, module);
+            delete module.definition;
         }
         return module.exports;
     }
     require.modules = {};
-    require.aliases = {};
-    require.resolve = function(path) {
-        if (path.charAt(0) === "/") path = path.slice(1);
-        var paths = [ path, path + ".js", path + ".json", path + "/index.js", path + "/index.json" ];
-        for (var i = 0; i < paths.length; i++) {
-            var path = paths[i];
-            if (require.modules.hasOwnProperty(path)) return path;
-            if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
-        }
-    };
-    require.normalize = function(curr, path) {
-        var segs = [];
-        if ("." != path.charAt(0)) return path;
-        curr = curr.split("/");
-        path = path.split("/");
-        for (var i = 0; i < path.length; ++i) {
-            if (".." == path[i]) {
-                curr.pop();
-            } else if ("." != path[i] && "" != path[i]) {
-                segs.push(path[i]);
-            }
-        }
-        return curr.concat(segs).join("/");
-    };
-    require.register = function(path, definition) {
-        require.modules[path] = definition;
-    };
-    require.alias = function(from, to) {
-        if (!require.modules.hasOwnProperty(from)) {
-            throw new Error('Failed to alias "' + from + '", it does not exist');
-        }
-        require.aliases[to] = from;
-    };
-    require.relative = function(parent) {
-        var p = require.normalize(parent, "..");
-        function lastIndexOf(arr, obj) {
-            var i = arr.length;
-            while (i--) {
-                if (arr[i] === obj) return i;
-            }
-            return -1;
-        }
-        function localRequire(path) {
-            var resolved = localRequire.resolve(path);
-            return require(resolved, parent, path);
-        }
-        localRequire.resolve = function(path) {
-            var c = path.charAt(0);
-            if ("/" == c) return path.slice(1);
-            if ("." == c) return require.normalize(p, path);
-            var segs = parent.split("/");
-            var i = lastIndexOf(segs, "deps") + 1;
-            if (!i) i = 0;
-            path = segs.slice(0, i + 1).join("/") + "/deps/" + path;
-            return path;
+    require.register = function(name, definition) {
+        require.modules[name] = {
+            definition: definition
         };
-        localRequire.exists = function(path) {
-            return require.modules.hasOwnProperty(localRequire.resolve(path));
-        };
-        return localRequire;
     };
-    require.register("codeactual-extend/index.js", function(exports, require, module) {
+    require.define = function(name, exports) {
+        require.modules[name] = {
+            exports: exports
+        };
+    };
+    require.register("codeactual~require-component@0.1.0", function(exports, module) {
+        "use strict";
+        module.exports = function(require) {
+            function requireComponent(shortName) {
+                var found;
+                Object.keys(require.modules).forEach(function findComponent(fullName) {
+                    if (found) {
+                        return;
+                    }
+                    if (new RegExp("~" + shortName + "@").test(fullName)) {
+                        found = fullName;
+                    }
+                });
+                if (found) {
+                    return require(found);
+                } else {
+                    return require(shortName);
+                }
+            }
+            return {
+                requireComponent: requireComponent
+            };
+        };
+    });
+    require.register("codeactual~extend@0.1.0", function(exports, module) {
         module.exports = function extend(object) {
             var args = Array.prototype.slice.call(arguments, 1);
             for (var i = 0, source; source = args[i]; i++) {
@@ -96,7 +56,7 @@
             return object;
         };
     });
-    require.register("component-type/index.js", function(exports, require, module) {
+    require.register("component~type@1.0.0", function(exports, module) {
         var toString = Object.prototype.toString;
         module.exports = function(val) {
             switch (toString.call(val)) {
@@ -125,10 +85,10 @@
             return typeof val;
         };
     });
-    require.register("component-clone/index.js", function(exports, require, module) {
+    require.register("component~clone@0.1.0", function(exports, module) {
         var type;
         try {
-            type = require("type");
+            type = require("component~type@1.0.0");
         } catch (e) {
             type = require("type-component");
         }
@@ -166,76 +126,120 @@
             }
         }
     });
-    require.register("pluma-assimilate/dist/assimilate.js", function(exports, require, module) {
+    require.register("pluma~assimilate@0.4.0", function(exports, module) {
         var slice = Array.prototype.slice;
-        function assimilateWithStrategy(strategy, copyInherited, target) {
-            var sources = slice.call(arguments, 3), i, source, key;
+        function bind(fn, self) {
+            var args = slice.call(arguments, 2);
+            if (typeof Function.prototype.bind === "function") {
+                return Function.prototype.bind.apply(fn, [ self ].concat(args));
+            }
+            return function() {
+                return fn.apply(self, args.concat(slice.call(arguments, 0)));
+            };
+        }
+        function simpleCopy(target, name, source) {
+            target[name] = source[name];
+        }
+        function properCopy(target, name, source) {
+            var descriptor = Object.getOwnPropertyDescriptor(source, name);
+            Object.defineProperty(target, name, descriptor);
+        }
+        function ownProperties(obj) {
+            return Object.getOwnPropertyNames(obj);
+        }
+        function allKeys(obj) {
+            var keys = [];
+            for (var name in obj) {
+                keys.push(name);
+            }
+            return keys;
+        }
+        function ownKeys(obj) {
+            var keys = [];
+            for (var name in obj) {
+                if (obj.hasOwnProperty(name)) {
+                    keys.push(name);
+                }
+            }
+            return keys;
+        }
+        function assimilateWithStrategy(target) {
+            var strategy = this, sources = slice.call(arguments, 1), i, source, names, j, name;
             if (target === undefined || target === null) {
                 target = {};
             }
             for (i = 0; i < sources.length; i++) {
                 source = sources[i];
-                if (source === undefined || source === null) continue;
-                for (key in source) {
-                    if (copyInherited || source.hasOwnProperty(key)) {
-                        strategy(target, source, key, copyInherited);
-                    }
+                names = strategy.keysFn(source);
+                for (j = 0; j < names.length; j++) {
+                    name = names[j];
+                    strategy.copyFn(target, name, source);
                 }
             }
             return target;
         }
-        function assimilate() {
-            var args = slice.call(arguments, 0);
-            return assimilateWithStrategy.apply(this, [ assimilate.strategies.DEFAULT, false ].concat(args));
-        }
-        assimilate.withStrategy = function(strategy, copyInherited) {
-            if (arguments.length === 1 && typeof strategy === "boolean") {
-                copyInherited = strategy;
-                strategy = "default";
-            }
-            if (typeof strategy === "string") {
-                strategy = strategy.toUpperCase();
-                if (typeof assimilate.strategies[strategy] === "function") {
-                    strategy = assimilate.strategies[strategy];
+        var strategies = {
+            DEFAULT: {
+                keysFn: ownKeys,
+                copyFn: simpleCopy
+            },
+            PROPER: {
+                keysFn: ownProperties,
+                copyFn: properCopy
+            },
+            INHERITED: {
+                keysFn: allKeys,
+                copyFn: simpleCopy
+            },
+            DEEP: {
+                keysFn: ownKeys,
+                copyFn: function recursiveCopy(target, name, source) {
+                    var val = source[name];
+                    var old = target[name];
+                    if (typeof val === "object" && typeof old === "object") {
+                        assimilateWithStrategy.call(strategies.DEEP, old, val);
+                    } else {
+                        simpleCopy(target, name, source);
+                    }
                 }
+            },
+            STRICT: {
+                keysFn: ownKeys,
+                copyFn: function strictCopy(target, name, source) {
+                    if (source[name] !== undefined) {
+                        simpleCopy(target, name, source);
+                    }
+                }
+            },
+            FALLBACK: {
+                keysFn: function fallbackCopy(target, name, source) {
+                    if (target[name] === undefined) {
+                        simpleCopy(target, name, source);
+                    }
+                },
+                copyFn: simpleCopy
             }
-            if (typeof strategy !== "function") {
-                throw new Error("Unknown strategy or not a function: " + strategy);
-            }
-            return function() {
-                var args = slice.call(arguments, 0);
-                return assimilateWithStrategy.apply(this, [ strategy, !!copyInherited ].concat(args));
-            };
         };
-        assimilate.strategies = {
-            DEFAULT: function(target, source, key) {
-                target[key] = source[key];
-            },
-            DEEP: function(target, source, key, copyInherited) {
-                var newValue = source[key];
-                var oldValue = target[key];
-                if (target.hasOwnProperty(key) && typeof newValue === "object" && typeof oldValue === "object") {
-                    assimilateWithStrategy(assimilate.strategies.DEEP, copyInherited, oldValue, newValue);
-                } else {
-                    target[key] = newValue;
-                }
-            },
-            STRICT: function(target, source, key) {
-                var value = source[key];
-                if (value !== undefined) {
-                    target[key] = value;
-                }
-            },
-            FALLBACK: function(target, source, key) {
-                var oldValue = target[key];
-                if (oldValue === undefined) {
-                    target[key] = source[key];
-                }
+        var assimilate = bind(assimilateWithStrategy, strategies.DEFAULT);
+        assimilate.strategies = strategies;
+        assimilate.withStrategy = function withStrategy(strategy) {
+            if (typeof strategy === "string") {
+                strategy = strategies[strategy.toUpperCase()];
             }
+            if (!strategy) {
+                throw new Error("Unknwon or invalid strategy:" + strategy);
+            }
+            if (typeof strategy.copyFn !== "function") {
+                throw new Error("Strategy missing copy function:" + strategy);
+            }
+            if (typeof strategy.keysFn !== "function") {
+                throw new Error("Strategy missing keys function:" + strategy);
+            }
+            return bind(assimilateWithStrategy, strategy);
         };
         module.exports = assimilate;
     });
-    require.register("qualiancy-tea-properties/lib/properties.js", function(exports, require, module) {
+    require.register("qualiancy~tea-properties@0.1.0", function(exports, module) {
         var exports = module.exports = {};
         exports.get = function(obj, path) {
             var parsed = parsePath(path);
@@ -297,32 +301,16 @@
             }
         }
     });
-    require.register("grunt-horde/lib/component/main.js", function(exports, require, module) {
-        module.exports = {
-            requireComponent: require
-        };
+    require.register("grunt-horde", function(exports, module) {
+        module.exports = require("codeactual~require-component@0.1.0")(require);
     });
-    require.alias("codeactual-extend/index.js", "grunt-horde/deps/extend/index.js");
-    require.alias("codeactual-extend/index.js", "extend/index.js");
-    require.alias("component-clone/index.js", "grunt-horde/deps/clone/index.js");
-    require.alias("component-clone/index.js", "clone/index.js");
-    require.alias("component-type/index.js", "component-clone/deps/type/index.js");
-    require.alias("pluma-assimilate/dist/assimilate.js", "grunt-horde/deps/assimilate/dist/assimilate.js");
-    require.alias("pluma-assimilate/dist/assimilate.js", "grunt-horde/deps/assimilate/index.js");
-    require.alias("pluma-assimilate/dist/assimilate.js", "assimilate/index.js");
-    require.alias("pluma-assimilate/dist/assimilate.js", "pluma-assimilate/index.js");
-    require.alias("qualiancy-tea-properties/lib/properties.js", "grunt-horde/deps/tea-properties/lib/properties.js");
-    require.alias("qualiancy-tea-properties/lib/properties.js", "grunt-horde/deps/tea-properties/index.js");
-    require.alias("qualiancy-tea-properties/lib/properties.js", "tea-properties/index.js");
-    require.alias("qualiancy-tea-properties/lib/properties.js", "qualiancy-tea-properties/index.js");
-    require.alias("grunt-horde/lib/component/main.js", "grunt-horde/index.js");
     if (typeof exports == "object") {
         module.exports = require("grunt-horde");
     } else if (typeof define == "function" && define.amd) {
-        define(function() {
+        define([], function() {
             return require("grunt-horde");
         });
     } else {
-        this["gruntHorde"] = require("grunt-horde");
+        this["grunt-horde"] = require("grunt-horde");
     }
 })();

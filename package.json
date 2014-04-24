@@ -1,7 +1,7 @@
 {
   "name": "grunt-horde",
   "description": "Packageable grunt configuration modules",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "index.js",
   "keywords": [
     "grunt",
@@ -25,23 +25,24 @@
     "url": "https://github.com/codeactual/grunt-horde.git"
   },
   "dependencies": {
-    "shelljs": "~0.2.6"
+    "shelljs": "^0.2.6"
   },
   "peerDependencies": {
     "grunt": "~0.4.1"
   },
   "devDependencies": {
-    "chai": "~1.8.1",
-    "component": "~0.18.0",
-    "apidox": "~0.3.1",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-uglify": "~0.2.0",
-    "grunt-shell": "~0.6.1",
-    "mocha": "~1.16.1",
-    "sinon": "~1.7.2",
-    "sinon-chai": "~2.4.0",
-    "sinon-doublist": "~0.4.1",
-    "sinon-doublist-fs": "~0.4.0"
+    "chai": "^1.9.1",
+    "component": "^1.0.0-rc5",
+    "apidox": "^0.3.6",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-shell": "^0.6.4",
+    "mocha": "^1.18.2",
+    "sinon": "^1.9.1",
+    "sinon-chai": "^2.5.0",
+    "sinon-doublist": "^0.4.3",
+    "sinon-doublist-fs": "^0.4.7",
+    "grunt": "^0.4.4"
   },
   "scripts": {
     "test": "grunt test"
