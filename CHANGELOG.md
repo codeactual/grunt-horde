@@ -1,5 +1,6 @@
 # 0.3.3
 
+- feat(module): Add `this.assimlate`
 - chore(pkg): Upgrade NPM and component deps
 
 # 0.3.2

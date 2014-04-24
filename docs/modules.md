@@ -142,6 +142,15 @@ Every module file will receive these properties.
 
 > Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
 
+### `assimilate`
+
+> Alias for the [module](https://github.com/pluma/assimilate) used in `grunt-horde` internally to merge objects. Included for convenience/consistency.
+
+```js
+var mergeDeep = assimilate.withStrategy('deep');
+var result = mergeDeep(obj1, obj2);
+```
+
 # Events
 
 Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.

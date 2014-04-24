@@ -165,6 +165,11 @@ describe('GruntHorde', function() {
       this.output.context.should.deep.equal(Object.keys(this.horde.createModuleContext()));
     });
 
+    it('should inject usable assimilate ref in context', function() {
+      var mergeDeep = this.horde.createModuleContext().assimilate.withStrategy('deep');
+      mergeDeep({a: {b: {c: {d: 1}}}}, {a: {b: {c: {e: 2}}}}).should.deep.equal({a: {b: {c: {d: 1, e: 2}}}});
+    });
+
     it('should pass grunt as arg', function() {
       this.output.grunt.should.deep.equal(grunt);
     });
