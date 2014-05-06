@@ -1,7 +1,7 @@
 {
   "name": "grunt-horde",
   "description": "Packageable grunt configuration modules",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "main": "index.js",
   "keywords": [
     "grunt",
@@ -25,7 +25,8 @@
     "url": "https://github.com/codeactual/grunt-horde.git"
   },
   "dependencies": {
-    "shelljs": "^0.2.6"
+    "shelljs": "^0.2.6",
+    "semver": "^2.2.1"
   },
   "peerDependencies": {
     "grunt": "~0.4.1"

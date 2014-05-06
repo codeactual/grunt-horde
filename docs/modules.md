@@ -151,6 +151,14 @@ var mergeDeep = this.assimilate.withStrategy('deep');
 var result = mergeDeep(obj1, obj2);
 ```
 
+### `age`
+
+> Alias for [semver](https://github.com/isaacs/node-semver). Included for convenience.
+
+```js
+this.demand('initConfig.harmony', this.age.satisfies(process.version, '>=0.11.9'));
+```
+
 # Events
 
 Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.

@@ -44,6 +44,18 @@
             };
         };
     });
+    require.register("codeactual~extend@0.1.0", function(exports, module) {
+        module.exports = function extend(object) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            for (var i = 0, source; source = args[i]; i++) {
+                if (!source) continue;
+                for (var property in source) {
+                    object[property] = source[property];
+                }
+            }
+            return object;
+        };
+    });
     require.register("component~type@1.0.0", function(exports, module) {
         var toString = Object.prototype.toString;
         module.exports = function(val) {
@@ -288,18 +300,6 @@
                 }
             }
         }
-    });
-    require.register("codeactual~extend@0.1.0", function(exports, module) {
-        module.exports = function extend(object) {
-            var args = Array.prototype.slice.call(arguments, 1);
-            for (var i = 0, source; source = args[i]; i++) {
-                if (!source) continue;
-                for (var property in source) {
-                    object[property] = source[property];
-                }
-            }
-            return object;
-        };
     });
     require.register("grunt-horde", function(exports, module) {
         module.exports = require("codeactual~require-component@0.1.0")(require);

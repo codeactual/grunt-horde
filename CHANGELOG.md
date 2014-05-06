@@ -1,3 +1,7 @@
+# 0.3.4
+
+- feat(module): Add `this.age` as alias to `semver`
+
 # 0.3.3
 
 - feat(module): Add `this.assimlate`

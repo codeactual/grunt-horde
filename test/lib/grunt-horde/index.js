@@ -170,6 +170,13 @@ describe('GruntHorde', function() {
       mergeDeep({a: {b: {c: {d: 1}}}}, {a: {b: {c: {e: 2}}}}).should.deep.equal({a: {b: {c: {d: 1, e: 2}}}});
     });
 
+    it('should inject usable semver ref in context', function() {
+      var ctx = this.horde.createModuleContext();
+      var version = '0.10.28';
+      ctx.age.satisfies(version, '>=0.6').should.be.ok;
+      ctx.age.satisfies(version, '>=0.100').should.not.be.ok;
+    });
+
     it('should pass grunt as arg', function() {
       this.output.grunt.should.deep.equal(grunt);
     });
