@@ -1,6 +1,7 @@
 # 0.3.5
 
 - fix(resolveRequire): Fixes #2, support Windows
+- fix(windows): Replace remaining `/` with `path.sep`
 
 # 0.3.4
 
