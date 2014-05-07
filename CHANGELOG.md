@@ -1,3 +1,7 @@
+# 0.3.5
+
+- fix(resolveRequire): Fixes #2, support Windows
+
 # 0.3.4
 
 - feat(module): Add `this.age` as alias to `semver`

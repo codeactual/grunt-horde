@@ -35,6 +35,7 @@ describe('GruntHorde', function() {
 
     this.horde = gruntHorde.create(grunt);
 
+    this.origPathSep = path.sep;
     this.nonInitSection = 'registerTask';
     this.sectionKey = 'x.y.z';
     this.nonInitKey = this.nonInitSection + '.' + this.sectionKey;
@@ -53,6 +54,7 @@ describe('GruntHorde', function() {
   });
 
   afterEach(function() {
+    path.sep = this.origPathSep;
     grunt.event.removeAllListeners('grunt-horde:demand');
     grunt.event.removeAllListeners('grunt-horde:kill');
   });
@@ -142,16 +144,47 @@ describe('GruntHorde', function() {
   });
 
   describe('#resolveRequire', function() {
-    it('should detect relative path', function() {
-      this.horde.resolveRequire('./config/grunt').should.equal(this.cwd + '/config/grunt');
+    describe('linux support', function() {
+      beforeEach(function() {
+        var os = require('os');
+        this.stub(os, 'type').returns('Linux');
+        path.sep = '/';
+      });
+
+      it('should detect relative path', function() {
+        this.horde.resolveRequire('./config/grunt').should.equal(this.cwd + '/config/grunt');
+      });
+
+      it('should detect installed module name', function() {
+        this.horde.resolveRequire('mod').should.equal(this.cwd + '/node_modules/mod');
+      });
+
+      it('should detect absolute nix path', function() {
+        this.horde.resolveRequire('/path/to/mod').should.equal('/path/to/mod');
+      });
     });
 
-    it('should detect installed module name', function() {
-      this.horde.resolveRequire('mod').should.equal(this.cwd + '/node_modules/mod');
-    });
+    describe('windows support', function() {
+      beforeEach(function() {
+        var os = require('os');
+        this.stub(os, 'type').returns('Windows');
+        path.sep = '\\';
 
-    it('should detect absolute path', function() {
-      this.horde.resolveRequire('/path/to/mod').should.equal('/path/to/mod');
+        this.cwd = 'C:\\path\\to\\mod';
+        this.horde.home(this.cwd);
+      });
+
+      it('should detect relative path', function() {
+        this.horde.resolveRequire('.\\config\\grunt').should.equal(this.cwd + '\\.\\config\\grunt');
+      });
+
+      it('should detect installed module name', function() {
+        this.horde.resolveRequire('mod').should.equal(this.cwd + '\\node_modules\\mod');
+      });
+
+      it('should detect absolute win path', function() {
+        this.horde.resolveRequire('C:\\path\\to\\mod').should.equal('C:\\path\\to\\mod');
+      });
     });
   });
 
