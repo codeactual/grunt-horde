@@ -1,6 +1,6 @@
 {
   "name": "grunt-horde",
-  "description": "Packageable grunt configuration modules",
+  "description": "Packageable, composable grunt configuration modules",
   "version": "0.3.5",
   "main": "index.js",
   "keywords": [
@@ -8,7 +8,10 @@
     "task",
     "config",
     "layout",
-    "modules"
+    "modules",
+    "cascading",
+    "composable",
+    "composition"
   ],
   "contributors": [
     {

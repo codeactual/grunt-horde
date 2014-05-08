@@ -1,6 +1,6 @@
 # grunt-horde
 
-Packageable grunt configuration modules
+Packageable, composable grunt configuration modules
 
 - Separate files define `grunt` configuration sections like [initConfig](http://gruntjs.com/api/grunt#grunt.initconfig), [loadNpmTasks](http://gruntjs.com/api/grunt#grunt.loadnpmtasks), etc.
 - Store modules in regular directories or leverage NPM, ex. `npm install git://`.
