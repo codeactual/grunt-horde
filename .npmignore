@@ -1,0 +1,5 @@
+*
+LICENSE
+!dist/**
+!lib/**
+!index.js
