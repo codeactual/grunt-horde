@@ -50,17 +50,17 @@ module.exports = function(grunt) {
         failOnError: true
       },
       install: {
-        command: 'component install'
+        command: './node_modules/.bin/component install'
       },
       dist: {
-        command: 'component build --umd --name grunt-horde --out dist'
+        command: './node_modules/.bin/component build --umd --name grunt-horde --out dist'
       },
       test_lib: {
         options: mochaShelljsOpt,
-        command: 'mocha --colors --recursive --reporter spec test/lib'
+        command: './node_modules/.bin/mocha --colors --recursive --reporter spec test/lib'
       },
       dox_lib: {
-        command: 'apidox --input lib/grunt-horde/index.js --output docs/GruntHorde.md'
+        command: './node_modules/.bin/apidox --input lib/grunt-horde/index.js --output docs/GruntHorde.md'
       }
     }
   });
