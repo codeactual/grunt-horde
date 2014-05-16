@@ -172,10 +172,33 @@ describe('GruntHorde', function() {
 
         this.cwd = 'C:\\path\\to\\mod';
         this.horde.home(this.cwd);
+
+        // path.js assigns private `isWindows`, so we can't magically use the
+        // Windows version of `normalize`. Here we'll just cover the minimum
+        // behaviors for these cases. See 0.11.13:
+        // https://github.com/joyent/node/blob/99c9930ad626e2796af23def7cac19b65c608d18/lib/path.js#L23
+        this.stub(path, 'normalize', function(p) {
+          // Strip leading:
+          // - ./
+          // - .\
+          // - ../
+          // - ..\
+          p = p.replace(/^\.{1,2}[\/\\]/, '');
+
+          // Convert slashes to NT-style to mimic Windows API
+          // http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx
+          p = p.replace(/\//g, '\\');
+          return p;
+        });
       });
 
-      it('should detect relative path', function() {
-        this.horde.resolveRequire('.\\config\\grunt').should.equal(this.cwd + '\\.\\config\\grunt');
+      it('should detect relative path with backward slashes', function() {
+        this.horde.resolveRequire('.\\config\\grunt').should.equal(this.cwd + '\\config\\grunt');
+      });
+
+      //
+      it('should detect relative path with forward slashes', function() {
+        this.horde.resolveRequire('./config/grunt').should.equal(this.cwd + '\\config\\grunt');
       });
 
       it('should detect installed module name', function() {
