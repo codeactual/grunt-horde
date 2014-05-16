@@ -2,6 +2,7 @@
 
 - fix(resolveRequire): Fixes #2, support Windows
 - fix(windows): Replace remaining `/` with `path.sep`
+- fix(resolveRequire): Normalize paths, simplify regex
 
 # 0.3.4
 
