@@ -43,8 +43,6 @@ Available from `module.exports` function context:
   - Example:
 - `this.age`: Alias for [semver](https://github.com/isaacs/node-semver).
 
-`key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
-
 ```js
 // Example: initConfig/jshint.js
 module.exports = function() {
@@ -61,14 +59,17 @@ module.exports = function() {
 - You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
 - To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
 
+All `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+
 ## `loot`
 
 > `loot` is the main way to compose your configuration from modules.
 
-- May be used to load any number of modules.
-- Payloads collected [merged recursively](https://github.com/pluma/assimilate), last wins.
-- Layout and content of module files must follow [conventions](#module-files).
-- Loads `tasks/`, if present, with `grunt.loadTasks`.
+- Objects returned by the modules are [merged recursively](https://github.com/pluma/assimilate). Last wins.
+- File layout of module packages must use specific [conventions](#module-files).
+- Every `module.exports` must be a function that returns `grunt` config key pairs.
+- Every `module.exports` receives one argument: the main `grunt` object.
+- Loads `tasks/`, if present, with [grunt.loadTasks](http://gruntjs.com/api/grunt.task#grunt.task.loadtasks).
 
 ## `demand`
 
