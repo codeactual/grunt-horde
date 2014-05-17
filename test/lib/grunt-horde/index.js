@@ -7,6 +7,7 @@ var util = require('util');
 var sprintf = util.format;
 var grunt = require('grunt');
 var shelljs = require('shelljs');
+var pathval = require('pathval');
 
 var should = chai.should();
 chai.config.includeStack = true;
@@ -18,7 +19,6 @@ var fixtureDir = __dirname + '/../../fixture';
 
 var requireComponent = require('../../../lib/component/require');
 var mergeDeep = requireComponent('assimilate').withStrategy('deep');
-var teaProp = requireComponent('tea-properties');
 
 require('sinon-doublist')(sinon, 'mocha');
 require('sinon-doublist-fs')('mocha');
@@ -43,7 +43,7 @@ describe('GruntHorde', function() {
     this.val = 20;
     this.val2 = 21;
     this.initKeyValObj = {};
-    teaProp.set(this.initKeyValObj, this.sectionKey, this.val);
+    pathval.set(this.initKeyValObj, this.sectionKey, this.val);
     this.config = {iAmA: 'fake config obj'};
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
@@ -315,11 +315,11 @@ describe('GruntHorde', function() {
       var context = this.horde.createModuleContext(this.modInitFile);
       var config = grunt.config.getRaw();
 
-      var setSpy = this.spy(teaProp, 'set');
+      var setSpy = this.spy(pathval, 'set');
       context.demand(this.initKey, this.val);
       setSpy.should.have.been.calledWithExactly(config, this.sectionKey, this.val);
 
-      var getSpy = this.spy(teaProp, 'get');
+      var getSpy = this.spy(pathval, 'get');
       context.learn(this.initKey).should.equal(this.val);
       getSpy.should.have.been.calledWithExactly(config, this.sectionKey);
 

@@ -3,6 +3,7 @@
 - fix(resolveRequire): Fixes #2, support Windows
 - fix(windows): Replace remaining `/` with `path.sep`
 - fix(resolveRequire): Normalize paths, simplify regex
+- chore(deps): Migrate to pathval
 
 # 0.3.4
 
