@@ -15,7 +15,7 @@ Packageable, composable grunt configuration modules
 
 ### `Gruntfile.js`
 
-> Define the composition at a high-level: the modules to merge, in what order, and final project-specific customization.
+> Define the composition at a high-level: the modules to merge, in what order, and final customization.
 
 ```js
 module.exports = function(grunt) {
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 
 ### `./node_modules/my-base-config/`
 
-> Loaded first, this module provides a baseline that later `loot` calls can update.
+> Loaded first, this module provides a baseline.
 
     initConfig/
         index.js
@@ -43,9 +43,8 @@ module.exports = function(grunt) {
     registerTask.js
     registerMultiTask.js
 
-`initConfig/jshint.js`:
-
 ```js
+// initConfig/jshint.js
 module.exports = function() {
   return {
     src: {
@@ -59,7 +58,7 @@ module.exports = function() {
 
 ### `./config/grunt/`
 
-> Defines project-specific configs merged recursively over `my-base-config`.
+> Defines project-specific configs that are [merged recursively](https://github.com/pluma/assimilate#deep) with `./node_modules/my-base-config`.
 
     initConfig/
         jshint.js
@@ -67,6 +66,7 @@ module.exports = function() {
     registerTask.js
 
 ```js
+// initConfig/jshint.js
 module.exports = function() {
   return {
     src: {
@@ -78,7 +78,7 @@ module.exports = function() {
 };
 ```
 
-Now `initConfig.jshint` contains both `src` (from `my-base-config`) and `test` (from `./config/grunt`) sections.
+Now `initConfig.jshint` contains both `src` (from `./node_modules/my-base-config`) and `test` (from `./config/grunt`).
 
 ## Installation
 
@@ -88,11 +88,16 @@ Now `initConfig.jshint` contains both `src` (from `my-base-config`) and `test` (
 
 ## Documentation
 
+### Usage
+
 - [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
 - [Writing Modules](docs/modules.md)
-- [Composition API](#docs/modules.md#composition-api)
-- [More Examples](docs/modules#examples)
-- [Internal API](docs/GruntHorde.md)
+- [Composition API](docs/modules.md#composition-api)
+- [More Examples](docs/modules.md#examples)
+
+### Development
+
+- [API](docs/GruntHorde.md)
 
 ## License
 

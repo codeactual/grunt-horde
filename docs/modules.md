@@ -1,12 +1,11 @@
 - [Composition API](#composition-api)
-- [Config Composition](#config-composition)
-- [Module Files](#module-file-layout)
+- [Module Files](#module-file)
 - [Examples](#module-examples)
 - [Events](#events)
 
 # Composition API
 
-## `Gruntfile.js` (`GruntHorde`)
+## `Gruntfile.js`
 
 > Create an instance in your `Gruntfile.js` to define the composition at a high-level.
 
@@ -27,7 +26,7 @@ module.exports = function(grunt) {
   - Local `node_modules/mod`: `mod`
 - `attack`: Apply your composition.
 
-## `Gruntfile.js` (`GruntHorde`) and modules
+## `Gruntfile.js` and modules
 
 - `demand(key, val)`: Modify the raw `grunt` config object.
 - `learn(key)`: Read from the raw `grunt` config object.
@@ -116,7 +115,7 @@ var orig = this.learn('initConfig.dev.logs');
 this.demand('initConfig.dev.logs', orig.concat('tmp/request.log'));
 ```
 
-# Module File Layout
+# Module Files
 
 You can compose a module from any combination of these files.
 
