@@ -2,23 +2,20 @@
 
 Packageable, composable grunt configuration modules
 
-- Separate files define `grunt` configuration sections like [initConfig](http://gruntjs.com/api/grunt#grunt.initconfig), [loadNpmTasks](http://gruntjs.com/api/grunt#grunt.loadnpmtasks), etc.
-- Store modules in regular directories or leverage NPM, ex. `npm install git://`.
-- Compose configuration from multiple modules w/ recursive merging, cascading, etc.
+- Use `Gruntfile.js` to define the composition at a high-level.
+- Reuse common configuration by storing them as modules.
+- Customize the merged configuration with a [composition API](docs/modules.md#composition-api).
+- More easily maintain sections like [initConfig](http://gruntjs.com/api/grunt#grunt.initconfig), [loadNpmTasks](http://gruntjs.com/api/grunt#grunt.loadnpmtasks), and [registerTask](http://gruntjs.com/api/grunt.task#grunt.task.registertask) in individual files.
+- Access convenient aliases for template expansion, object merging, and semver.
+- Load configurations from regular directories or local NPM modules.
 
 [![Build Status](https://travis-ci.org/codeactual/grunt-horde.png)](https://travis-ci.org/codeactual/grunt-horde)
-
-## [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
 
 ## Example
 
 ### `Gruntfile.js`
 
-Available API:
-
-- `loot` selects standard node modules whose `exports` are marged recursively.
-- `demand` updates the raw `grunt` config object.
-- `attack` applies the configuration to `grunt`.
+> Define the composition at a high-level: the modules to merge, in what order, and final project-specific customization.
 
 ```js
 module.exports = function(grunt) {
@@ -33,7 +30,7 @@ module.exports = function(grunt) {
 
 ### `./node_modules/my-base-config/`
 
-Loaded first, this module provides a baseline that later `loot` calls can update.
+> Loaded first, this module provides a baseline that later `loot` calls can update.
 
     initConfig/
         index.js
@@ -46,18 +43,42 @@ Loaded first, this module provides a baseline that later `loot` calls can update
     registerTask.js
     registerMultiTask.js
 
-[Module Documentation](docs/modules.md)
+`initConfig/jshint.js`:
+
+```js
+module.exports = function() {
+  return {
+    src: {
+      files: {
+        src: ['index.js', 'lib/**/*.js']
+      }
+    }
+  };
+};
+```
 
 ### `./config/grunt/`
 
-Defines project-specific configs merged recursively over `my-base-config`.
+> Defines project-specific configs merged recursively over `my-base-config`.
 
     initConfig/
         jshint.js
     loadNpmTasks.js
     registerTask.js
 
-[Module Documentation](docs/modules.md)
+```js
+module.exports = function() {
+  return {
+    src: {
+      files: {
+        test: ['test/**/*.js']
+      }
+    }
+  };
+};
+```
+
+Now `initConfig.jshint` contains both `src` (from `my-base-config`) and `test` (from `./config/grunt`) sections.
 
 ## Installation
 
@@ -68,7 +89,10 @@ Defines project-specific configs merged recursively over `my-base-config`.
 ## Documentation
 
 - [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
-- [API](docs/GruntHorde.md)
+- [Writing Modules](docs/modules.md)
+- [Composition API](#docs/modules.md#composition-api)
+- [More Examples](docs/modules#examples)
+- [Internal API](docs/GruntHorde.md)
 
 ## License
 
