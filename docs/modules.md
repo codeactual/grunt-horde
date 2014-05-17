@@ -12,28 +12,29 @@
 ```js
 module.exports = function(grunt) {
   var horde = require('grunt-horde').create(grunt);
-  horde
-    .loot('my-base-config')
+  horde                       // GruntHorde instance
+    .loot('my-base-config')   // NPM
     .loot('./config/grunt')
     .demand('initConfig.jshint.options', {node: true})
     .attack();
 };
 ```
 
+Available from `GruntHorde` instance:
+
 - `loot(name)`: Load a module and merge in its key/value pairs.
   - Relative path: `./path/to/mod`
   - Absolute path: `/path/to/mod`
   - Local `node_modules/mod`: `mod`
-- `attack`: Apply your composition.
-
-## `Gruntfile.js` and modules
-
-- `demand(key, val)`: Modify the raw `grunt` config object.
-- `learn(key)`: Read from the raw `grunt` config object.
+- `demand(key, val)`: Setter for the raw `grunt` config object.
+- `learn(key)`: Getter for the raw `grunt` config object.
+- `attack`: Apply composition.
 
 `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
 
-## Module `exports` functions
+## Modules
+
+Available from `module.exports` function context:
 
 - `this.demand(key, val)`: Setter for the raw `grunt` config object.
 - `this.learn(key)`: Getter for the raw `grunt` config object.
@@ -42,7 +43,25 @@ module.exports = function(grunt) {
   - Example:
 - `this.age`: Alias for [semver](https://github.com/isaacs/node-semver).
 
-## More on [loot()](GruntHorde.md#tableofcontents)
+`key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+
+```js
+// Example: initConfig/jshint.js
+module.exports = function() {
+  return {
+    src: {
+      files: {
+        test: ['test/**/*.js']
+      }
+    }
+  };
+};
+```
+
+- You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
+- To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
+
+## `loot`
 
 > `loot` is the main way to compose your configuration from modules.
 
@@ -51,24 +70,25 @@ module.exports = function(grunt) {
 - Layout and content of module files must follow [conventions](#module-files).
 - Loads `tasks/`, if present, with `grunt.loadTasks`.
 
-## More on [demand()](GruntHorde.md#tableofcontents)
+## `demand`
 
 Using `demand()` from `Gruntfile.js` and module contexts
 
 > Afterward you can optionally customize the merge result with `demand`.
 
+- Alias for [GruntHorde.prototype.demand](GruntHorde.md#tableofcontents).
+- Emits an [event](#events) for debugging.
+
 [demand()](GruntHorde.md#tableofcontents) operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
 
-- Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
-- Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
-- `demand` is alias for [GruntHorde.prototype.demand](GruntHorde.md#tableofcontents).
-- `demand` emits an [event](#events) for debugging.
+1. Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
+1. Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
 
-## More on [learn()](GruntHorde.md#tableofcontents)
+## `learn`
 
-- `learn` is an alias for [GruntHorde.prototype.learn](GruntHorde.md#tableofcontents).
+-  Alias for [GruntHorde.prototype.learn](GruntHorde.md#tableofcontents).
 
-## More on `assimilate`
+## `assimilate`
 
 Example of object merging with `assimilate`:
 
@@ -77,7 +97,7 @@ var mergeDeep = this.assimilate.withStrategy('deep');
 var result = mergeDeep(obj1, obj2);
 ```
 
-## More on `age`
+## `age`
 
 Example of using `age` to adjust configuration based on semver:
 
@@ -90,11 +110,6 @@ if (this.learn('initConfig.harmony')) {
   defaultOptions.esnext = true;
 }
 ```
-
-## Module `return` values
-
-- You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
-- To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
 
 ## Precedence
 
