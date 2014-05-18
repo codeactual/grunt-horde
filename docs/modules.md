@@ -72,10 +72,11 @@ module.exports = function() {
 };
 ```
 
+Notes:
+
 - You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
 - To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
-
-All `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+- All `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
 
 ## Method Notes
 
