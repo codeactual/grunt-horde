@@ -12,7 +12,7 @@
   - [loadTasks.js](#loadtasksjs)
   - [registerTask.js](#registertaskjs)
   - [registerMultiTask.js](#registermultitaskjs)
-- [Examples](#module-examples)
+- [Examples](#examples)
 - [Events](#events)
 
 # Composition API
@@ -247,6 +247,17 @@ I combine these configurations in most of my projects and then customize, if nee
 # Events
 
 Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.
+
+```js
+// Gruntfile.js
+module.exports = function(grunt) {
+  grunt.event.on('grunt-horde:demand', function(source, section, key, val, mode) {
+    console.log('demand:', source, section, key, val, mode);
+  });
+
+  // ...
+};
+```
 
 ## `grunt-horde:demand`
 
