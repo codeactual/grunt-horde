@@ -13,6 +13,7 @@
   - [registerTask.js](#registertaskjs)
   - [registerMultiTask.js](#registermultitaskjs)
 - [Examples](#examples)
+- [Tips](#tips)
 - [Events](#events)
 
 # Composition API
@@ -42,7 +43,10 @@ Available from `GruntHorde` instance:
 - `learn(key)`: Getter for the raw `grunt` config object.
 - `attack`: Apply composition.
 
-`key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+Notes:
+
+- `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+- On Windows, use backward slashes only.
 
 ## In Modules
 
@@ -243,6 +247,10 @@ I combine these configurations in most of my projects and then customize, if nee
 - [conjure](https://github.com/codeactual/conjure/blob/master/Gruntfile.js)
 - [prankcall](https://github.com/codeactual/prankcall/blob/master/Gruntfile.js)
 - [apidox](https://github.com/codeactual/apidox/blob/master/Gruntfile.js)
+
+# Tips
+
+- Consider `npm install --save-dev git://...` as a means of reusing configuration packages across multiple projects. The [examples](#examples) above use that approach.
 
 # Events
 
