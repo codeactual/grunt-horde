@@ -10,8 +10,8 @@
   - [tasks/&lt;name&gt;.js](#tasksnamejs)
   - [loadNpmTasks.js](#loadnpmtasksjs)
   - [loadTasks.js](#loadtasksjs)
-  - [registerTask.js](#registertask)
-  - [registerMultiTask.js](#registermultitask)
+  - [registerTask.js](#registertaskjs)
+  - [registerMultiTask.js](#registermultitaskjs)
 - [Examples](#module-examples)
 - [Events](#events)
 
