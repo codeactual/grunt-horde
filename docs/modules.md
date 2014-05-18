@@ -1,84 +1,124 @@
 - [Composition API](#composition-api)
-- [Config Composition](#config-composition)
-- [Module Files](#module-file-layout)
-- [Examples](#module-examples)
+  - [loot(name)](#loot)
+  - [demand(key, val)](#demand)
+  - [learn(key)](#learn)
+  - [assimilate](#assimilate)
+  - [age](#age)
+- [Module Files](#module-files)
+  - [initConfig/index.js](#initconfigindexjs)
+  - [initConfig/&lt;name&gt;.js](#initconfignamejs)
+  - [tasks/&lt;name&gt;.js](#tasksnamejs)
+  - [loadNpmTasks.js](#loadnpmtasksjs)
+  - [loadTasks.js](#loadtasksjs)
+  - [registerTask.js](#registertaskjs)
+  - [registerMultiTask.js](#registermultitaskjs)
+- [Examples](#examples)
+- [Tips](#tips)
 - [Events](#events)
 
 # Composition API
 
-## `Gruntfile.js` (`GruntHorde`)
+## In `Gruntfile.js`
 
 > Create an instance in your `Gruntfile.js` to define the composition at a high-level.
 
 ```js
 module.exports = function(grunt) {
   var horde = require('grunt-horde').create(grunt);
-  horde
-    .loot('my-base-config')
+  horde                       // GruntHorde instance
+    .loot('my-base-config')   // NPM
     .loot('./config/grunt')
     .demand('initConfig.jshint.options', {node: true})
     .attack();
 };
 ```
 
+Available from `GruntHorde` instance:
+
 - `loot(name)`: Load a module and merge in its key/value pairs.
   - Relative path: `./path/to/mod`
   - Absolute path: `/path/to/mod`
   - Local `node_modules/mod`: `mod`
-- `attack`: Apply your composition.
+- `demand(key, val)`: Setter for the raw `grunt` config object.
+- `learn(key)`: Getter for the raw `grunt` config object.
+- `kill(key)`: Delete from the raw `grunt` config object.
+- `attack`: Apply composition.
 
-## `Gruntfile.js` (`GruntHorde`) and modules
+Notes:
 
-- `demand(key, val)`: Modify the raw `grunt` config object.
-- `learn(key)`: Read from the raw `grunt` config object.
+- `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.jshint.options`.
+- On Windows, use backward slashes only.
 
-`key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+## In Modules
 
-## Module `exports` functions
+Available from `module.exports` function context:
 
 - `this.demand(key, val)`: Setter for the raw `grunt` config object.
 - `this.learn(key)`: Getter for the raw `grunt` config object.
+- `this.kill(key)`: Delete from the raw `grunt` config object.
 - `this.t(template [, options])`: Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
 - `this.assimilate`: Alias for the [pluma/assimilate](https://github.com/pluma/assimilate) used in `grunt-horde` to merge objects (in `deep` mode).
   - Example:
 - `this.age`: Alias for [semver](https://github.com/isaacs/node-semver).
 
-## More on [loot()](GruntHorde.md#tableofcontents)
+```js
+// Example: initConfig/jshint.js
+module.exports = function() {
+  return {
+    src: {
+      files: {
+        test: ['test/**/*.js']
+      }
+    }
+  };
+};
+```
+
+Notes:
+
+- You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
+- To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
+- All `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.jshint.options`.
+
+## Method Notes
+
+### `loot`
 
 > `loot` is the main way to compose your configuration from modules.
 
-- May be used to load any number of modules.
-- Payloads collected [merged recursively](https://github.com/pluma/assimilate), last wins.
-- Layout and content of module files must follow [conventions](#module-files).
-- Loads `tasks/`, if present, with `grunt.loadTasks`.
+- Objects returned by the modules are [merged recursively](https://github.com/pluma/assimilate). Last wins.
+- File layout of module packages must use specific [conventions](#module-files).
+- Every `module.exports` must be a function that returns `grunt` config key pairs.
+- Every `module.exports` receives one argument: the main `grunt` object.
+- Loads `tasks/`, if present, with [grunt.loadTasks](http://gruntjs.com/api/grunt.task#grunt.task.loadtasks).
 
-## More on [demand()](GruntHorde.md#tableofcontents)
+### `demand`
 
-Using `demand()` from `Gruntfile.js` and module contexts
+> Use it to individually set raw `grunt` config keys, ex. to add project-specific settings to a current project-agnostic composition.
 
-> Afterward you can optionally customize the merge result with `demand`.
+- Alias for [GruntHorde.prototype.demand](GruntHorde.md#tableofcontents).
+- Emits an [event](#events) for debugging.
+- Values may include standard `<%= keyName %>` templates. (You can also expand template variables immediately with [this.t](#composition-api).)
+- Compliments `learn` by allowing you to inspect the current value before changing it.
 
-[demand()](GruntHorde.md#tableofcontents) operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
+### `learn`
 
-- Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
-- Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
-- `demand` is alias for [GruntHorde.prototype.demand](GruntHorde.md#tableofcontents).
-- `demand` emits an [event](#events) for debugging.
+-  Alias for [GruntHorde.prototype.learn](GruntHorde.md#tableofcontents).
 
-## More on [learn()](GruntHorde.md#tableofcontents)
+### `kill`
 
-- `learn` is an alias for [GruntHorde.prototype.learn](GruntHorde.md#tableofcontents).
+-  Alias for [GruntHorde.prototype.kill](GruntHorde.md#tableofcontents).
 
-## More on `assimilate`
+### `assimilate`
 
-Example of object merging with `assimilate`:
+Example of object merging with [assimilate](https://github.com/pluma/assimilate#deep-copying-example):
 
 ```js
 var mergeDeep = this.assimilate.withStrategy('deep');
-var result = mergeDeep(obj1, obj2);
+mergeDeep(currentPairs, newPairs);
 ```
 
-## More on `age`
+### `age`
 
 Example of using `age` to adjust configuration based on semver:
 
@@ -91,11 +131,6 @@ if (this.learn('initConfig.harmony')) {
   defaultOptions.esnext = true;
 }
 ```
-
-## Module `return` values
-
-- You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
-- To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
 
 ## Precedence
 
@@ -116,7 +151,7 @@ var orig = this.learn('initConfig.dev.logs');
 this.demand('initConfig.dev.logs', orig.concat('tmp/request.log'));
 ```
 
-# Module File Layout
+# Module Files
 
 You can compose a module from any combination of these files.
 
@@ -132,7 +167,9 @@ module.exports = function(grunt) {
 };
 ```
 
-## `initConfig/<name>.js`, ex. `initConfig/uglify.js`
+## `initConfig/<name>.js`
+
+Example: `initConfig/uglify.js`
 
 > Defines the `uglify` section passed to `grunt.initConfig`.
 
@@ -147,9 +184,11 @@ module.exports = function(grunt) {
 };
 ```
 
-## `tasks/<name>.js`, ex. `tasks/precommit.js`
+## `tasks/<name>.js`
 
-> Defines a module that will be discovered/loaded by `grunt.loadTasks`.
+Example: `tasks/precommit.js`
+
+> Defines a module that will be processed by `grunt.loadTasks` if enabled in [loadTasks.js](#loadtasksjs).
 
 ## `loadNpmTasks.js`
 
@@ -165,8 +204,6 @@ module.exports = function(grunt) {
 
 ## `loadTasks.js`
 
-> `false` can be used to disable a task path enabled in a module earlier in the merge.
-
 ```js
 module.exports = function(grunt) {
   return {
@@ -174,6 +211,9 @@ module.exports = function(grunt) {
   };
 };
 ```
+
+- Each returned key should refer to a [task file](#tasksnamejs).
+- Use `false` to disable a task enabled by a module earlier in the merge.
 
 ## `registerTask.js`
 
@@ -216,9 +256,24 @@ I combine these configurations in most of my projects and then customize, if nee
 - [prankcall](https://github.com/codeactual/prankcall/blob/master/Gruntfile.js)
 - [apidox](https://github.com/codeactual/apidox/blob/master/Gruntfile.js)
 
+# Tips
+
+- Consider `npm install --save-dev git://...` as a means of reusing configuration packages across multiple projects. The [examples](#examples) above use that approach.
+
 # Events
 
 Subscribe through the [grunt.event](http://gruntjs.com/api/grunt.event) API.
+
+```js
+// Gruntfile.js
+module.exports = function(grunt) {
+  grunt.event.on('grunt-horde:demand', function(source, section, key, val, mode) {
+    console.log('demand:', source, section, key, val, mode);
+  });
+
+  // ...
+};
+```
 
 ## `grunt-horde:demand`
 

@@ -1,9 +1,8 @@
 # 0.3.5
 
-- fix(resolveRequire): Fixes #2, support Windows
-- fix(windows): Replace remaining `/` with `path.sep`
-- fix(resolveRequire): Normalize paths, simplify regex
-- chore(deps): Migrate to pathval
+- fix(resolveRequire): Improve Windows support
+- docs(all): Reorganize and expand
+- chore(deps): Migrate to pathval from tea-properties
 
 # 0.3.4
 
