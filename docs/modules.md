@@ -4,7 +4,7 @@
   - [learn(key)](#learn)
   - [assimilate](#assimilate)
   - [age](#age)
-- [Module Files](#module-file)
+- [Module Files](#module-files)
   - [initConfig/index.js](#initconfigindexjs)
   - [initConfig/&lt;name&gt;.js](#initconfignamejs)
   - [tasks/&lt;name&gt;.js](#tasksnamejs)
@@ -41,11 +41,12 @@ Available from `GruntHorde` instance:
   - Local `node_modules/mod`: `mod`
 - `demand(key, val)`: Setter for the raw `grunt` config object.
 - `learn(key)`: Getter for the raw `grunt` config object.
+- `kill(key)`: Delete from the raw `grunt` config object.
 - `attack`: Apply composition.
 
 Notes:
 
-- `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+- `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.jshint.options`.
 - On Windows, use backward slashes only.
 
 ## In Modules
@@ -54,6 +55,7 @@ Available from `module.exports` function context:
 
 - `this.demand(key, val)`: Setter for the raw `grunt` config object.
 - `this.learn(key)`: Getter for the raw `grunt` config object.
+- `this.kill(key)`: Delete from the raw `grunt` config object.
 - `this.t(template [, options])`: Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
 - `this.assimilate`: Alias for the [pluma/assimilate](https://github.com/pluma/assimilate) used in `grunt-horde` to merge objects (in `deep` mode).
   - Example:
@@ -76,7 +78,7 @@ Notes:
 
 - You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
 - To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
-- All `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
+- All `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.jshint.options`.
 
 ## Method Notes
 
@@ -102,6 +104,10 @@ Notes:
 ### `learn`
 
 -  Alias for [GruntHorde.prototype.learn](GruntHorde.md#tableofcontents).
+
+### `kill`
+
+-  Alias for [GruntHorde.prototype.kill](GruntHorde.md#tableofcontents).
 
 ### `assimilate`
 
