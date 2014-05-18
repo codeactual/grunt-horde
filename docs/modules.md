@@ -188,7 +188,7 @@ module.exports = function(grunt) {
 
 Example: `tasks/precommit.js`
 
-> Defines a module that will be discovered/loaded by `grunt.loadTasks`.
+> Defines a module that will be processed by `grunt.loadTasks` if enabled in [loadTasks.js](#loadtasksjs).
 
 ## `loadNpmTasks.js`
 
@@ -213,6 +213,9 @@ module.exports = function(grunt) {
   };
 };
 ```
+
+- Each returned key should refer to a [task file](#tasksnamejs).
+- Use `false` to disable a task enabled by a module earlier in the merge.
 
 ## `registerTask.js`
 

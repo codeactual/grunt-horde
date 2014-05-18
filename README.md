@@ -91,7 +91,7 @@ Now `initConfig.jshint` contains both `src` (from `./node_modules/my-base-config
 ### Usage
 
 - [Introduction](http://codeactual.github.io/06/02/2013/introducing-grunt-horde.html)
-- [Modules](docs/modules.md)
+- Modules
   - [Composition API](docs/modules.md#composition-api)
   - [Files](docs/modules.md#module-files)
   - [Examples](docs/modules.md#examples)
