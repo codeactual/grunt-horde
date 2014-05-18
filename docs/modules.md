@@ -1,16 +1,23 @@
 - [Composition API](#composition-api)
+  - [loot(name)](#loot)
   - [demand(key, val)](#demand)
   - [learn(key)](#learn)
-  - [loot(name)](#loot)
   - [assimilate](#assimilate)
   - [age](#age)
 - [Module Files](#module-file)
+  - [initConfig/index.js](#initconfigindexjs)
+  - [initConfig/<name>.js](#initconfignamejs)
+  - [tasks/<name>.js](#tasksnamejs)
+  - [loadNpmTasks.js](#loadnpmtasksjs)
+  - [loadTasks.js](#loadtasksjs)
+  - [registerTask.js](#registertask)
+  - [registerMultiTask.js](#registermultitask)
 - [Examples](#module-examples)
 - [Events](#events)
 
 # Composition API
 
-## `Gruntfile.js`
+## In `Gruntfile.js`
 
 > Create an instance in your `Gruntfile.js` to define the composition at a high-level.
 
@@ -37,7 +44,7 @@ Available from `GruntHorde` instance:
 
 `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
 
-## Modules
+## In Modules
 
 Available from `module.exports` function context:
 
@@ -66,7 +73,9 @@ module.exports = function() {
 
 All `key` values are [string paths](https://github.com/chaijs/pathval) like `initConfig.jshint.options`.
 
-## `loot`
+## Method Notes
+
+### `loot`
 
 > `loot` is the main way to compose your configuration from modules.
 
@@ -76,25 +85,20 @@ All `key` values are [string paths](https://github.com/chaijs/pathval) like `ini
 - Every `module.exports` receives one argument: the main `grunt` object.
 - Loads `tasks/`, if present, with [grunt.loadTasks](http://gruntjs.com/api/grunt.task#grunt.task.loadtasks).
 
-## `demand`
+### `demand`
 
-Using `demand()` from `Gruntfile.js` and module contexts
-
-> Afterward you can optionally customize the merge result with `demand`.
+> Use it to individually set raw `grunt` config keys, ex. to add project-specific settings to a current project-agnostic composition.
 
 - Alias for [GruntHorde.prototype.demand](GruntHorde.md#tableofcontents).
 - Emits an [event](#events) for debugging.
+- Values may include standard `<%= keyName %>` templates. (You can also expand template variables immediately with [this.t](#composition-api).)
+- Compliments `learn` by allowing you to inspect the current value before changing it.
 
-[demand()](GruntHorde.md#tableofcontents) operates the same in both situations: it updates the raw `grunt` config object. This offer two main benefits:
-
-1. Templates: Values are available for standard `<%= keyName %>` substitution or via [t()](#context-properties).
-1. Programmatic use: For example, values set in `Gruntfile.js` or any `initConfig/` file can be accessed elsewhere w/ [learn()](#context-properties).
-
-## `learn`
+### `learn`
 
 -  Alias for [GruntHorde.prototype.learn](GruntHorde.md#tableofcontents).
 
-## `assimilate`
+### `assimilate`
 
 Example of object merging with `assimilate`:
 
@@ -103,7 +107,7 @@ var mergeDeep = this.assimilate.withStrategy('deep');
 var result = mergeDeep(obj1, obj2);
 ```
 
-## `age`
+### `age`
 
 Example of using `age` to adjust configuration based on semver:
 
@@ -152,7 +156,9 @@ module.exports = function(grunt) {
 };
 ```
 
-## `initConfig/<name>.js`, ex. `initConfig/uglify.js`
+## `initConfig/<name>.js`
+
+Example: `initConfig/uglify.js`
 
 > Defines the `uglify` section passed to `grunt.initConfig`.
 
@@ -167,7 +173,9 @@ module.exports = function(grunt) {
 };
 ```
 
-## `tasks/<name>.js`, ex. `tasks/precommit.js`
+## `tasks/<name>.js`
+
+Example: `tasks/precommit.js`
 
 > Defines a module that will be discovered/loaded by `grunt.loadTasks`.
 
