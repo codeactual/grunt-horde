@@ -111,11 +111,11 @@ Notes:
 
 ### `assimilate`
 
-Example of object merging with `assimilate`:
+Example of object merging with [assimilate](https://github.com/pluma/assimilate#deep-copying-example):
 
 ```js
 var mergeDeep = this.assimilate.withStrategy('deep');
-var result = mergeDeep(obj1, obj2);
+mergeDeep(currentPairs, newPairs);
 ```
 
 ### `age`
@@ -203,8 +203,6 @@ module.exports = function(grunt) {
 ```
 
 ## `loadTasks.js`
-
-> `false` can be used to disable a task path enabled in a module earlier in the merge.
 
 ```js
 module.exports = function(grunt) {
