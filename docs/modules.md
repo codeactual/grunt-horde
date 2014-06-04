@@ -232,10 +232,34 @@ module.exports = function(grunt) {
 > Defines the arguments passed to `grunt.registerMultiTask`.
 
 ```js
-module.exports = function(grunt) {
-  var myMultiTask = require('./multi-tasks/secret-sauce.js');
+// initConfig/copyrightScan.js
+module.exports = function() {
   return {
-    myMultiTask: ['some description', myMultiTask]
+    libHttp: {
+      dir: 'lib/http'
+    },
+    testHttp: {
+      dir: 'test/lib/http'
+    }
+  };
+};
+
+// ./multi-tasks/find-missing-copyright-notice.js
+module.exports = function() {
+  // `grunt copyrightScan:libHttp` output:
+  console.log(this.target);   // "libHttp"
+  console.log(this.data.dir); // "lib/http"
+  
+  // `grunt copyrightScan:testHttp` output:
+  console.log(this.target);   // "testHttp"
+  console.log(this.data.dir); // "test/http"
+};
+
+// registerMultiTask.js
+module.exports = function(grunt) {
+  var taskFn = require('./multi-tasks/find-missing-copyright-notice.js');
+  return {
+    copyrightScan: ['Scan for missing copyright notice', taskFn]
   };
 };
 ```
