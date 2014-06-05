@@ -229,7 +229,7 @@ module.exports = function(grunt) {
 };
 ```
 
-You can also provide a function and provide colon-delimited arguments:
+You can also provide a function which optionally accepts colon-delimited arguments:
 
 ```js
 module.exports = function(grunt) {
@@ -239,10 +239,11 @@ module.exports = function(grunt) {
     }],
     add: [function( arg1, arg2 ) {
       grunt.log.writeln(arg1 + ' + ' + arg2 + ' = ' + (parseFloat(arg1) + parseFloat(arg2)));
-    }],
+    }]
   };
 };
-
+```
+```
 > grunt hello
   hello world
 > grunt hello:David
@@ -251,7 +252,7 @@ module.exports = function(grunt) {
   1.2 + 3.4 = 4.6
 ```
 
-You can also provide an optional description that will be used by `grunt --help`:
+You can also provide an optional description that will be displayed by `grunt --help`:
 
 ```js
 module.exports = function(grunt) {
@@ -263,6 +264,8 @@ module.exports = function(grunt) {
     }]
   };
 };
+```
+```
 > grunt --help
               default  Alias for "jshint", "qunit", "concat", "uglify" tasks.
  aliasWithDescription  Build without tests
