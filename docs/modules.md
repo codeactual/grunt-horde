@@ -217,15 +217,60 @@ module.exports = function(grunt) {
 
 ## `registerTask.js`
 
-> Defines the arguments passed to `grunt.registerTask`.
+> Defines the arguments passed to [`grunt.registerTask`](http://gruntjs.com/creating-tasks).
+
+This example alias task defines a "default" task whereby the "jshint", "qunit","concat" and "uglify" tasks are run automatically if Grunt is executed without specifying any tasks:
 
 ```js
 module.exports = function(grunt) {
   return {
-    default: [['task1', 'task2']]
+    default: [['jshint', 'qunit', 'concat', 'uglify']]
   };
 };
 ```
+
+You can also provide a function and provide colon-delimited arguments:
+
+```js
+module.exports = function(grunt) {
+  return {
+    hello: [function (target) {
+      console.info('hello ' + (target || 'world'));
+    }],
+    add: [function( arg1, arg2 ) {
+      grunt.log.writeln(arg1 + ' + ' + arg2 + ' = ' + (parseFloat(arg1) + parseFloat(arg2)));
+    }],
+  };
+};
+
+> grunt hello
+  hello world
+> grunt hello:David
+  hello David
+> grunt add:1.2:3.4
+  1.2 + 3.4 = 4.6
+```
+
+You can also provide an optional description that will be used by `grunt --help`:
+
+```js
+module.exports = function(grunt) {
+  return {
+    default: [['jshint', 'qunit', 'concat', 'uglify']],
+    aliasWithDescription: ['Build without tests', ['concat', 'uglify']],
+    hello: ['Hello World example', function (target) {
+      console.info('hello ' + (target || 'world'));
+    }]
+  };
+};
+> grunt --help
+              default  Alias for "jshint", "qunit", "concat", "uglify" tasks.
+ aliasWithDescription  Build without tests
+                hello  Hello World example
+```
+
+For more details, refer [Creating tasks](http://gruntjs.com/creating-tasks)
+
 
 ## `registerMultiTask.js`
 
