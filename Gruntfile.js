@@ -2,7 +2,6 @@ module.exports = function(grunt) {
   'use strict';
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-shell');
 
   var mochaShelljsOpt = {stdout: true, stderr: false};
@@ -33,27 +32,9 @@ module.exports = function(grunt) {
         }
       }
     },
-    uglify: {
-      dist: {
-        options: {
-          compress: false,
-          mangle: false,
-          beautify: true
-        },
-        files: {
-          'dist/grunt-horde.js': 'dist/grunt-horde.js'
-        }
-      }
-    },
     shell: {
       options: {
         failOnError: true
-      },
-      install: {
-        command: './node_modules/.bin/component install'
-      },
-      dist: {
-        command: './node_modules/.bin/component build --umd --name grunt-horde --out dist'
       },
       test_lib: {
         options: mochaShelljsOpt,
@@ -67,7 +48,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['jshint']);
   grunt.registerTask('dox', ['shell:dox_lib']);
-  grunt.registerTask('build', ['default', 'shell:dist']);
-  grunt.registerTask('dist', ['default', 'shell:dist', 'uglify:dist', 'dox']);
-  grunt.registerTask('test', ['build', 'shell:test_lib']);
+  grunt.registerTask('test', ['shell:test_lib']);
 };

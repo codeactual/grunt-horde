@@ -1,3 +1,8 @@
+# 0.3.6
+
+- fix(assimlate): Migrate from [assimlate](https://github.com/pluma0/assimilate) to [extend](https://github.com/justmoon/node-extend/)
+  -
+
 # 0.3.5
 
 - fix(resolveRequire): Improve Windows support
