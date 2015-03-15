@@ -9,6 +9,75 @@
         }
         return module.exports;
     }
+    require.loader = "component";
+    require.helper = {};
+    require.helper.semVerSort = function(a, b) {
+        var aArray = a.version.split(".");
+        var bArray = b.version.split(".");
+        for (var i = 0; i < aArray.length; ++i) {
+            var aInt = parseInt(aArray[i], 10);
+            var bInt = parseInt(bArray[i], 10);
+            if (aInt === bInt) {
+                var aLex = aArray[i].substr(("" + aInt).length);
+                var bLex = bArray[i].substr(("" + bInt).length);
+                if (aLex === "" && bLex !== "") return 1;
+                if (aLex !== "" && bLex === "") return -1;
+                if (aLex !== "" && bLex !== "") return aLex > bLex ? 1 : -1;
+                continue;
+            } else if (aInt > bInt) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        return 0;
+    };
+    require.latest = function(name, returnPath) {
+        function showError(name) {
+            throw new Error('failed to find latest module of "' + name + '"');
+        }
+        var versionRegexp = /(.*)~(.*)@v?(\d+\.\d+\.\d+[^\/]*)$/;
+        var remoteRegexp = /(.*)~(.*)/;
+        if (!remoteRegexp.test(name)) showError(name);
+        var moduleNames = Object.keys(require.modules);
+        var semVerCandidates = [];
+        var otherCandidates = [];
+        for (var i = 0; i < moduleNames.length; i++) {
+            var moduleName = moduleNames[i];
+            if (new RegExp(name + "@").test(moduleName)) {
+                var version = moduleName.substr(name.length + 1);
+                var semVerMatch = versionRegexp.exec(moduleName);
+                if (semVerMatch != null) {
+                    semVerCandidates.push({
+                        version: version,
+                        name: moduleName
+                    });
+                } else {
+                    otherCandidates.push({
+                        version: version,
+                        name: moduleName
+                    });
+                }
+            }
+        }
+        if (semVerCandidates.concat(otherCandidates).length === 0) {
+            showError(name);
+        }
+        if (semVerCandidates.length > 0) {
+            var module = semVerCandidates.sort(require.helper.semVerSort).pop().name;
+            if (returnPath === true) {
+                return module;
+            }
+            return require(module);
+        }
+        var module = otherCandidates.sort(function(a, b) {
+            return a.name > b.name;
+        })[0].name;
+        if (returnPath === true) {
+            return module;
+        }
+        return require(module);
+    };
     require.modules = {};
     require.register = function(name, definition) {
         require.modules[name] = {
@@ -20,23 +89,23 @@
             exports: exports
         };
     };
-    require.register("codeactual~require-component@0.1.0", function(exports, module) {
+    require.register("codeactual~require-component@0.1.1", function(exports, module) {
         "use strict";
         module.exports = function(require) {
-            function requireComponent(shortName) {
+            function requireComponent(baseName) {
                 var found;
                 Object.keys(require.modules).forEach(function findComponent(fullName) {
                     if (found) {
                         return;
                     }
-                    if (new RegExp("~" + shortName + "@").test(fullName)) {
+                    if (new RegExp("(^|~)" + baseName + "@").test(fullName)) {
                         found = fullName;
                     }
                 });
                 if (found) {
                     return require(found);
                 } else {
-                    return require(shortName);
+                    return require(baseName);
                 }
             }
             return {
@@ -56,13 +125,10 @@
             return object;
         };
     });
-    require.register("component~type@1.0.0", function(exports, module) {
+    require.register("component~type@1.1.0", function(exports, module) {
         var toString = Object.prototype.toString;
         module.exports = function(val) {
             switch (toString.call(val)) {
-              case "[object Function]":
-                return "function";
-
               case "[object Date]":
                 return "date";
 
@@ -75,20 +141,21 @@
               case "[object Array]":
                 return "array";
 
-              case "[object String]":
-                return "string";
+              case "[object Error]":
+                return "error";
             }
             if (val === null) return "null";
             if (val === undefined) return "undefined";
+            if (val !== val) return "nan";
             if (val && val.nodeType === 1) return "element";
-            if (val === Object(val)) return "object";
+            val = val.valueOf ? val.valueOf() : Object.prototype.valueOf.apply(val);
             return typeof val;
         };
     });
     require.register("component~clone@0.1.0", function(exports, module) {
         var type;
         try {
-            type = require("component~type@1.0.0");
+            type = require("component~type@1.1.0");
         } catch (e) {
             type = require("type-component");
         }
@@ -240,15 +307,15 @@
         module.exports = assimilate;
     });
     require.register("grunt-horde", function(exports, module) {
-        module.exports = require("codeactual~require-component@0.1.0")(require);
+        module.exports = require("codeactual~require-component@0.1.1")(require);
     });
     if (typeof exports == "object") {
         module.exports = require("grunt-horde");
     } else if (typeof define == "function" && define.amd) {
-        define([], function() {
+        define("grunt-horde", [], function() {
             return require("grunt-horde");
         });
     } else {
-        this["grunt-horde"] = require("grunt-horde");
+        (this || window)["grunt-horde"] = require("grunt-horde");
     }
 })();

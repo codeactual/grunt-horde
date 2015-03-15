@@ -17,8 +17,7 @@ var gruntHorde = require('../../..');
 var GruntHorde = gruntHorde.GruntHorde;
 var fixtureDir = __dirname + '/../../fixture';
 
-var requireComponent = require('../../../lib/component/require');
-var mergeDeep = requireComponent('assimilate').withStrategy('deep');
+var extend = require('extend');
 
 require('sinon-doublist')(sinon, 'mocha');
 require('sinon-doublist-fs')('mocha');
@@ -66,7 +65,7 @@ describe('GruntHorde', function() {
       this.horde.config.initConfig = expected;
       this.horde.attack();
       this.gruntStub.initConfig.should.have.been.calledWithExactly(
-        mergeDeep({}, expected, this.initKeyValObj)
+        extend(true, {}, expected, this.initKeyValObj)
       );
     });
 
@@ -112,6 +111,20 @@ describe('GruntHorde', function() {
       this.horde.cwd.should.equal(this.cwd);
       this.horde.home(this.home);
       this.horde.cwd.should.equal(this.home);
+    });
+  });
+
+  describe('#assimilate', function() {
+    it('should deep clone source objects', function() {
+      var assimilate = this.horde.createModuleContext().assimilate;
+      var src = [
+        {a: {b: {c: {d: 'zero'}}}, zero: true},
+        {a: {b: {c: {d: 'one'}}}, one: true}
+      ];
+      var result = assimilate(true, {}, src[0], src[1]);
+      result.should.deep.equal({a: {b: {c: {d: 'one'}}}, zero: true, one: true});
+      src[0].should.deep.equal({a: {b: {c: {d: 'zero'}}}, zero: true});
+      src[1].should.deep.equal({a: {b: {c: {d: 'one'}}}, one: true});
     });
   });
 
@@ -222,8 +235,8 @@ describe('GruntHorde', function() {
     });
 
     it('should inject usable assimilate ref in context', function() {
-      var mergeDeep = this.horde.createModuleContext().assimilate.withStrategy('deep');
-      mergeDeep({a: {b: {c: {d: 1}}}}, {a: {b: {c: {e: 2}}}}).should.deep.equal({a: {b: {c: {d: 1, e: 2}}}});
+      var assimilate = this.horde.createModuleContext().assimilate;
+      assimilate(true, {a: {b: {c: {d: 1}}}}, {a: {b: {c: {e: 2}}}}).should.deep.equal({a: {b: {c: {d: 1, e: 2}}}});
     });
 
     it('should inject usable semver ref in context', function() {
