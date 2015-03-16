@@ -58,7 +58,7 @@ module.exports = function() {
 
 ### `./config/grunt/`
 
-> Defines project-specific configs that are [merged recursively](https://github.com/pluma/assimilate#deep) with `./node_modules/my-base-config`.
+> Defines project-specific configs that are [merged recursively](https://github.com/justmoon/node-extend) with `./node_modules/my-base-config`.
 
     initConfig/
         eslint.js

@@ -57,7 +57,7 @@ Available from `module.exports` function context:
 - `this.learn(key)`: Getter for the raw `grunt` config object.
 - `this.kill(key)`: Delete from the raw `grunt` config object.
 - `this.t(template [, options])`: Alias for [grunt.template.process](http://gruntjs.com/api/grunt.template#grunt.template.process).
-- `this.assimilate`: Alias for the [pluma/assimilate](https://github.com/pluma/assimilate) used in `grunt-horde` to merge objects (in `deep` mode).
+- `this.assimilate`: Alias for the [justmoon/node-extend](https://github.com/justmoon/node-extend) used in `grunt-horde` to merge objects recursively.
   - Example:
 - `this.age`: Alias for [semver](https://github.com/isaacs/node-semver).
 
@@ -86,7 +86,7 @@ Notes:
 
 > `loot` is the main way to compose your configuration from modules.
 
-- Objects returned by the modules are [merged recursively](https://github.com/pluma/assimilate). Last wins.
+- Objects returned by the modules are [merged recursively](https://github.com/justmoon/node-extend). Last wins.
 - File layout of module packages must use specific [conventions](#module-files).
 - Every `module.exports` must be a function that returns `grunt` config key pairs.
 - Every `module.exports` receives one argument: the main `grunt` object.
@@ -111,11 +111,11 @@ Notes:
 
 ### `assimilate`
 
-Example of object merging with [assimilate](https://github.com/pluma/assimilate#deep-copying-example):
+Example of object merging with [assimilate](https://github.com/justmoon/node-extend):
 
 ```js
-var mergeDeep = this.assimilate.withStrategy('deep');
-mergeDeep(currentPairs, newPairs);
+// By using {} as the target, currentPairs is not modified in the process.
+var mergeResult = this.assimilate(true, {}, currentPairs, newPairs);
 ```
 
 ### `age`
