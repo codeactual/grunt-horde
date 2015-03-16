@@ -5,6 +5,8 @@
 - fix(assimlate): prevent source object modification
   - Migrate from [assimlate](https://github.com/pluma0/assimilate) to [extend](https://github.com/justmoon/node-extend/)
   - To avoid object modification: `this.assimilate.withStrategy('deep')({}, src0, src1, ...)` becomes `this.assimilate(true, {}, src0, src1, ...)`
+- refactor(node): Migrate to ES6 features like `let` and `const`
+  - Switch to `iojs` as only build target
 
 ## non-breaking
 

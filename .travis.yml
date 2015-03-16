@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - "0.12"
   - "iojs"
 before_script:
   - npm install grunt-cli@0.1.13 grunt@0.4.5
