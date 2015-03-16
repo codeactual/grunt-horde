@@ -82,7 +82,7 @@ Now `initConfig.eslint` contains both `src` (from `./node_modules/my-base-config
 
 ## Installation
 
-### [NPM](https://npmjs.org/package/grunt-horde)
+### [NPM](https://www.npmjs.com/package/grunt-horde)
 
     npm install grunt-horde
 
