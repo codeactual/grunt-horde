@@ -1,7 +1,7 @@
 {
   "name": "grunt-horde",
   "description": "Packageable, composable grunt configuration modules",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "main": "index.js",
   "keywords": [
     "grunt",
