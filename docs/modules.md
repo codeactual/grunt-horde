@@ -28,7 +28,7 @@ module.exports = function(grunt) {
   horde                       // GruntHorde instance
     .loot('my-base-config')   // NPM
     .loot('./config/grunt')
-    .demand('initConfig.jshint.options', {node: true})
+    .demand('initConfig.eslint.options', {envs: ['node', 'es6']})
     .attack();
 };
 ```
@@ -46,7 +46,7 @@ Available from `GruntHorde` instance:
 
 Notes:
 
-- `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.jshint.options`.
+- `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.eslint.options`.
 - On Windows, use backward slashes only.
 
 ## In Modules
@@ -62,7 +62,7 @@ Available from `module.exports` function context:
 - `this.age`: Alias for [semver](https://github.com/isaacs/node-semver).
 
 ```js
-// Example: initConfig/jshint.js
+// Example: initConfig/eslint.js
 module.exports = function() {
   return {
     src: {
@@ -78,7 +78,7 @@ Notes:
 
 - You can safely omit `return` without side effect, ex. if your module only needs to use `demand/learn`.
 - To removing a top-level config key, use [kill(key)](GruntHorde.md#tableofcontents).
-- All `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.jshint.options`.
+- All `key` values are [string paths](https://github.com/chaijs/pathval#usage) like `initConfig.eslint.options`.
 
 ## Method Notes
 
@@ -126,7 +126,7 @@ Example of using `age` to adjust configuration based on semver:
 // Ex. in Gruntfile.js
 this.demand('initConfig.harmony', this.age.satisfies(process.version, '>=0.11.9'));
 
-// Ex. in initConfig/jshint.js
+// Ex. in initConfig/eslint.js
 if (this.learn('initConfig.harmony')) {
   defaultOptions.esnext = true;
 }
@@ -353,7 +353,7 @@ module.exports = function(grunt) {
 
 Receives arguments:
 
-- `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
+- `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/eslint.js'
 - `{string} section` Ex. `initConfig`, `registerTask`, etc.
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} val` Config val, ex. `20`
@@ -368,7 +368,7 @@ Receives arguments:
 
 Receives arguments:
 
-- `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/jshint.js'
+- `{string} source` Ex. 'Gruntfile' or '/path/to/initConfig/eslint.js'
 - `{string} section` Ex. `initConfig`, `registerTask`, etc.
 - `{string} key` Config key, ex. `x.y.z`
 - `{string} mode`

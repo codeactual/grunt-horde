@@ -44,7 +44,7 @@ describe('GruntHorde', function() {
     this.cwd = process.cwd();
     this.home = '/path/to/proj';
     this.modDirPath = '/path/to/nowhere';
-    this.modInitFile = '/path/to/nowhere/initConfig/jshint.js';
+    this.modInitFile = '/path/to/nowhere/initConfig/eslint.js';
     this.modNonInitFile = '/path/to/nowhere/' + this.nonInitSection + '.js';
     this.gruntStub = this.stub(grunt);
   });
@@ -275,16 +275,16 @@ describe('GruntHorde', function() {
   describe('#requireDir', function() {
     beforeEach(function() {
       // Fake dir scan
-      this.files = ['index.js', 'jshint.js'];
+      this.files = ['index.js', 'eslint.js'];
       this.lsStub = this.stub(shelljs, 'ls');
       this.lsStub.withArgs(this.modDirPath + '/*.js').returns(this.files);
 
       // Fake dir-to-config-obj conversion
       this.reduceOut = {
         index: {iKey1: 1, iKey2: 2},
-        categorized: {jshint: {jKey1: 3, jKey2: 4}}
+        categorized: {eslint: {jKey1: 3, jKey2: 4}}
       };
-      this.merged = {iKey1: 1, iKey2: 2, jshint: {jKey1: 3, jKey2: 4}};
+      this.merged = {iKey1: 1, iKey2: 2, eslint: {jKey1: 3, jKey2: 4}};
       this.reduceFn = {iAmA: 'fake fn'};
       this.reduceDirBindStub = this.stub(GruntHorde.reduceDirToConfig, 'bind');
       this.reduceDirBindStub.withArgs(this.horde).returns(this.reduceFn);

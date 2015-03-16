@@ -23,7 +23,7 @@ module.exports = function(grunt) {
   horde
     .loot('my-base-config')
     .loot('./config/grunt')
-    .demand('initConfig.jshint.options', {node: true})
+    .demand('initConfig.eslint.options', {envs: ['node', 'es6']})
     .attack();
 };
 ```
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 
     initConfig/
         index.js
-        jshint.js
+        eslint.js
         shell.js
     tasks/
         precommit.js
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
     registerMultiTask.js
 
 ```js
-// initConfig/jshint.js
+// initConfig/eslint.js
 module.exports = function() {
   return {
     src: {
@@ -61,12 +61,12 @@ module.exports = function() {
 > Defines project-specific configs that are [merged recursively](https://github.com/pluma/assimilate#deep) with `./node_modules/my-base-config`.
 
     initConfig/
-        jshint.js
+        eslint.js
     loadNpmTasks.js
     registerTask.js
 
 ```js
-// initConfig/jshint.js
+// initConfig/eslint.js
 module.exports = function() {
   return {
     src: {
@@ -78,7 +78,7 @@ module.exports = function() {
 };
 ```
 
-Now `initConfig.jshint` contains both `src` (from `./node_modules/my-base-config`) and `test` (from `./config/grunt`).
+Now `initConfig.eslint` contains both `src` (from `./node_modules/my-base-config`) and `test` (from `./config/grunt`).
 
 ## Installation
 

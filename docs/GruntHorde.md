@@ -193,7 +193,7 @@ horde.loot('/path/to/base'); // require('/path/to/base');
 ```
 initConfig/
   index.js
-  jshint.js
+  eslint.js
   uglify.js
   shell.js
 tasks/
