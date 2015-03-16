@@ -1,7 +1,7 @@
-module.exports = function() {
+module.exports = function exports() {
   'use strict';
 
-  var orig = this.learn('initConfig.plugin2.p2k2.d');
+  const orig = this.learn('initConfig.plugin2.p2k2.d');
   this.demand('initConfig.plugin2.p2k2.d', orig.concat('merge'));
 
   return {

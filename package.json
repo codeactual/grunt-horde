@@ -37,16 +37,16 @@
     "grunt": "^0.4.1"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
     "apidox": "^0.3.6",
-    "grunt-contrib-jshint": "^0.10.0",
+    "chai": "^1.9.1",
+    "grunt": "^0.4.4",
+    "grunt-eslint": "^9.0.0",
     "grunt-shell": "^0.6.4",
     "mocha": "^1.18.2",
     "sinon": "^1.9.1",
     "sinon-chai": "^2.5.0",
     "sinon-doublist": "^0.4.3",
-    "sinon-doublist-fs": "^0.4.7",
-    "grunt": "^0.4.4"
+    "sinon-doublist-fs": "^0.4.7"
   },
   "scripts": {
     "test": "grunt test"

@@ -1,23 +1,20 @@
 /*jshint expr:true*/
-var sinon = require('sinon');
-var chai = require('chai');
-var fs = require('fs');
-var path = require('path');
-var util = require('util');
-var sprintf = util.format;
-var grunt = require('grunt');
-var shelljs = require('shelljs');
-var pathval = require('pathval');
+const sinon = require('sinon');
+const chai = require('chai');
+const path = require('path');
+const grunt = require('grunt');
+const shelljs = require('shelljs');
+const pathval = require('pathval');
 
-var should = chai.should();
+const should = chai.should();
 chai.config.includeStack = true;
 chai.use(require('sinon-chai'));
 
-var gruntHorde = require('../../..');
-var GruntHorde = gruntHorde.GruntHorde;
-var fixtureDir = __dirname + '/../../fixture';
+const gruntHorde = require('../../..');
+const GruntHorde = gruntHorde.GruntHorde;
+const fixtureDir = path.join(__dirname, '/../../fixture');
 
-var extend = require('extend');
+const extend = require('extend');
 
 require('sinon-doublist')(sinon, 'mocha');
 require('sinon-doublist-fs')('mocha');
@@ -27,7 +24,7 @@ describe('GruntHorde', function() {
 
   beforeEach(function() {
     // Clean up prior test's modifications to static config object.
-    var gruntRawConfig = grunt.config.getRaw();
+    const gruntRawConfig = grunt.config.getRaw();
     Object.keys(gruntRawConfig).forEach(function(key) {
       delete gruntRawConfig[key];
     });
@@ -60,7 +57,7 @@ describe('GruntHorde', function() {
 
   describe('#attack', function() {
     it('should init config', function() {
-      var expected = {iAmA: 'fake init config'};
+      const expected = {iAmA: 'fake init config'};
       this.horde.demand(this.initKey, this.val);
       this.horde.config.initConfig = expected;
       this.horde.attack();
@@ -70,7 +67,7 @@ describe('GruntHorde', function() {
     });
 
     it('should load tasks', function() {
-      var expected = {t1: true, t2: false, t3: true, t4: false};
+      const expected = {t1: true, t2: false, t3: true, t4: false};
       this.horde.config.loadTasks = expected;
       this.horde.attack();
       this.gruntStub.loadTasks.should.have.been.calledTwice;
@@ -79,7 +76,7 @@ describe('GruntHorde', function() {
     });
 
     it('should load npm tasks', function() {
-      var expected = {t1: true, t2: false, t3: true, t4: false};
+      const expected = {t1: true, t2: false, t3: true, t4: false};
       this.horde.config.loadNpmTasks = expected;
       this.horde.attack();
       this.gruntStub.loadNpmTasks.should.have.been.calledTwice;
@@ -88,7 +85,7 @@ describe('GruntHorde', function() {
     });
 
     it('should register tasks', function() {
-      var expected = {t1: ['t1 arg1', 't1 arg2'], t2: ['t2 arg1', 't2 arg2']};
+      const expected = {t1: ['t1 arg1', 't1 arg2'], t2: ['t2 arg1', 't2 arg2']};
       this.horde.config.registerTask = expected;
       this.horde.attack();
       this.gruntStub.registerTask.should.have.been.calledTwice;
@@ -97,7 +94,7 @@ describe('GruntHorde', function() {
     });
 
     it('should register multi tasks', function() {
-      var expected = {t1: ['t1 arg1', 't1 arg2'], t2: ['t2 arg1', 't2 arg2']};
+      const expected = {t1: ['t1 arg1', 't1 arg2'], t2: ['t2 arg1', 't2 arg2']};
       this.horde.config.registerMultiTask = expected;
       this.horde.attack();
       this.gruntStub.registerMultiTask.should.have.been.calledTwice;
@@ -116,12 +113,12 @@ describe('GruntHorde', function() {
 
   describe('#assimilate', function() {
     it('should deep clone source objects', function() {
-      var assimilate = this.horde.createModuleContext().assimilate;
-      var src = [
+      const assimilate = this.horde.createModuleContext().assimilate;
+      const src = [
         {a: {b: {c: {d: 'zero'}}}, zero: true},
         {a: {b: {c: {d: 'one'}}}, one: true}
       ];
-      var result = assimilate(true, {}, src[0], src[1]);
+      const result = assimilate(true, {}, src[0], src[1]);
       result.should.deep.equal({a: {b: {c: {d: 'one'}}}, zero: true, one: true});
       src[0].should.deep.equal({a: {b: {c: {d: 'zero'}}}, zero: true});
       src[1].should.deep.equal({a: {b: {c: {d: 'one'}}}, one: true});
@@ -146,8 +143,8 @@ describe('GruntHorde', function() {
     });
 
     it('should load tasks dir if present', function() {
-      var taskFile = this.horde.resolveRequire(this.dir + '/tasks/tasks-1.js');
-      var expected = {};
+      const taskFile = this.horde.resolveRequire(this.dir + '/tasks/tasks-1.js');
+      const expected = {};
       expected[path.dirname(taskFile)] = true;
       this.stubTree(taskFile);
       this.horde.loot(this.dir);
@@ -159,7 +156,7 @@ describe('GruntHorde', function() {
   describe('#resolveRequire', function() {
     describe('linux support', function() {
       beforeEach(function() {
-        var os = require('os');
+        const os = require('os');
         this.stub(os, 'type').returns('Linux');
         path.sep = '/';
       });
@@ -179,7 +176,7 @@ describe('GruntHorde', function() {
 
     describe('windows support', function() {
       beforeEach(function() {
-        var os = require('os');
+        const os = require('os');
         this.stub(os, 'type').returns('Windows');
         path.sep = '\\';
 
@@ -235,13 +232,13 @@ describe('GruntHorde', function() {
     });
 
     it('should inject usable assimilate ref in context', function() {
-      var assimilate = this.horde.createModuleContext().assimilate;
+      const assimilate = this.horde.createModuleContext().assimilate;
       assimilate(true, {a: {b: {c: {d: 1}}}}, {a: {b: {c: {e: 2}}}}).should.deep.equal({a: {b: {c: {d: 1, e: 2}}}});
     });
 
     it('should inject usable semver ref in context', function() {
-      var ctx = this.horde.createModuleContext();
-      var version = '0.10.28';
+      const ctx = this.horde.createModuleContext();
+      const version = '0.10.28';
       ctx.age.satisfies(version, '>=0.6').should.be.ok;
       ctx.age.satisfies(version, '>=0.100').should.not.be.ok;
     });
@@ -257,7 +254,7 @@ describe('GruntHorde', function() {
 
   describe('#requireIfExists', function() {
     it('should test resolved path', function() {
-      var stub = this.stub(shelljs, 'test');
+      const stub = this.stub(shelljs, 'test');
       stub.returns(false);
       this.horde.requireIfExists('./rel/path/file.js');
       stub.should.have.been.calledWithExactly('-e', this.cwd + '/rel/path/file.js');
@@ -265,7 +262,7 @@ describe('GruntHorde', function() {
 
     it('should return loaded config if exists', function() {
       this.stubFile(this.modDirPath).make();
-      var stub = this.stub(this.horde, 'require');
+      const stub = this.stub(this.horde, 'require');
       stub.withArgs(this.modDirPath).returns(this.config);
       this.horde.requireIfExists(this.modDirPath).should.deep.equal(this.config);
     });
@@ -305,7 +302,7 @@ describe('GruntHorde', function() {
 
   describe('#requireDirIfExists', function() {
     it('should test resolved path', function() {
-      var stub = this.stub(shelljs, 'test');
+      const stub = this.stub(shelljs, 'test');
       stub.returns(false);
       this.horde.requireDirIfExists('./rel/path');
       stub.should.have.been.calledWithExactly('-d', this.cwd + '/rel/path');
@@ -313,7 +310,7 @@ describe('GruntHorde', function() {
 
     it('should return loaded config if exists', function() {
       this.stubFile(this.modDirPath).readdir(['child']).make();
-      var stub = this.stub(this.horde, 'requireDir');
+      const stub = this.stub(this.horde, 'requireDir');
       stub.withArgs(this.modDirPath).returns(this.config);
       this.horde.requireDirIfExists(this.modDirPath).should.deep.equal(this.config);
     });
@@ -325,18 +322,18 @@ describe('GruntHorde', function() {
 
   describe('#createModuleContext', function() {
     it('should include expected properties', function() {
-      var context = this.horde.createModuleContext(this.modInitFile);
-      var config = grunt.config.getRaw();
+      const context = this.horde.createModuleContext(this.modInitFile);
+      const config = grunt.config.getRaw();
 
-      var setSpy = this.spy(pathval, 'set');
+      const setSpy = this.spy(pathval, 'set');
       context.demand(this.initKey, this.val);
       setSpy.should.have.been.calledWithExactly(config, this.sectionKey, this.val);
 
-      var getSpy = this.spy(pathval, 'get');
+      const getSpy = this.spy(pathval, 'get');
       context.learn(this.initKey).should.equal(this.val);
       getSpy.should.have.been.calledWithExactly(config, this.sectionKey);
 
-      var processSpy = this.spy(grunt.template, 'process');
+      const processSpy = this.spy(grunt.template, 'process');
       context.t('txt', {a: 1});
       processSpy.should.have.been.calledWithExactly('txt', {a: 1});
 
@@ -345,8 +342,8 @@ describe('GruntHorde', function() {
     });
 
     it('should include #demand bound to source', function(testDone) {
-      var self = this;
-      var context = this.horde.createModuleContext(this.modInitFile);
+      const self = this;
+      const context = this.horde.createModuleContext(this.modInitFile);
       grunt.event.once('grunt-horde:demand', function(source, section, key, val) {
         source.should.equal(self.modInitFile);
         section.should.equal('initConfig');
@@ -358,8 +355,8 @@ describe('GruntHorde', function() {
     });
 
     it('should include #kill bound to source', function(testDone) {
-      var self = this;
-      var context = this.horde.createModuleContext(this.modInitFile);
+      const self = this;
+      const context = this.horde.createModuleContext(this.modInitFile);
       grunt.event.once('grunt-horde:kill', function(source, section, key) {
         source.should.equal(self.modInitFile);
         section.should.equal('initConfig');
@@ -370,8 +367,8 @@ describe('GruntHorde', function() {
     });
 
     it('should emit non-initConfig section', function(testDone) {
-      var self = this;
-      var context = this.horde.createModuleContext(this.modNonInitFile);
+      const self = this;
+      const context = this.horde.createModuleContext(this.modNonInitFile);
       grunt.event.once('grunt-horde:kill', function(source, section) {
         section.should.equal(self.nonInitSection);
         testDone();
@@ -387,19 +384,19 @@ describe('GruntHorde', function() {
       this.indexMod = {a: 1, b: 2};
       this.nonIndexMod1 = {c: 3};
       this.nonIndexMod2 = {d: 4};
-      var stub = this.stub(this.horde, 'require');
+      const stub = this.stub(this.horde, 'require');
       stub.withArgs('index.js').returns(this.indexMod);
       stub.withArgs('non-index1.js').returns(this.nonIndexMod1);
       stub.withArgs('non-index2.js').returns(this.nonIndexMod2);
     });
 
     it('should collect top-level keys', function() {
-      var out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'index.js');
+      const out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'index.js');
       out.should.deep.equal({index: this.indexMod, categorized:{}});
     });
 
     it('should collect file-categorized keys', function() {
-      var out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'non-index1.js');
+      let out = GruntHorde.reduceDirToConfig.call(this.horde, this.memo, 'non-index1.js');
       out.should.deep.equal({index: {}, categorized: {'non-index1': this.nonIndexMod1}});
       out = GruntHorde.reduceDirToConfig.call(this.horde, out, 'non-index2.js');
       out.should.deep.equal({
@@ -440,7 +437,7 @@ describe('GruntHorde', function() {
     });
 
     it('should emit event', function(testDone) {
-      var self = this;
+      const self = this;
       grunt.event.once('grunt-horde:kill', function(source, section, key) {
         source.should.equal('Gruntfile');
         section.should.equal('initConfig');
@@ -479,7 +476,7 @@ describe('GruntHorde', function() {
   describe('#demand', function() {
     it('should update initConfig', function() {
       this.horde.demand(this.initKey, this.val);
-      var config = grunt.config.getRaw();
+      const config = grunt.config.getRaw();
       config.x.y.z.should.equal(this.val);
       this.horde.learn(this.initKey).should.equal(this.val);
     });
@@ -490,7 +487,7 @@ describe('GruntHorde', function() {
     });
 
     it('should emit event', function(testDone) {
-      var self = this;
+      const self = this;
       grunt.event.once('grunt-horde:demand', function(source, section, key, val, mode) {
         source.should.equal('Gruntfile');
         section.should.equal('initConfig');
@@ -503,7 +500,7 @@ describe('GruntHorde', function() {
     });
 
     it('should detect invalid key namespace', function(testDone) {
-      var self = this;
+      const self = this;
       (function() {
         self.horde.demand('config', {key: 'value'});
       }).should.Throw(Error, '"config" does not exist');
