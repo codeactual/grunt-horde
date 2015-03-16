@@ -34,7 +34,7 @@
     "shelljs": "^0.2.6"
   },
   "peerDependencies": {
-    "grunt": "^0.4.1"
+    "grunt": "^0.4.5"
   },
   "devDependencies": {
     "apidox": "^0.3.6",
