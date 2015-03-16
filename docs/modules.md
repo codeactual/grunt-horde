@@ -359,7 +359,7 @@ Receives arguments:
 - `{string} val` Config val, ex. `20`
 - `{string} mode`
   - `''`: initial/updated value from module was accepted
-  - `frozen`: new value from module was denied (already odified by `Gruntfile.js`)
+  - `frozen`: new value from module was denied (already modified by `Gruntfile.js`)
   - `freezing`: value modified from `Gruntfile.js`
 
 ## `grunt-horde:kill`
