@@ -1,4 +1,4 @@
-/*jshint expr:true*/
+/*eslint func-names: 0, new-cap: 0, no-unused-expressions: 0, no-wrap-func: 0*/
 const sinon = require('sinon');
 const chai = require('chai');
 const path = require('path');

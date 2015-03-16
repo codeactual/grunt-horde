@@ -4,7 +4,6 @@ module.exports = function exports(grunt) {
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-shell');
 
-  const extend = require('extend');
   const mochaShelljsOpt = {stdout: true, stderr: false};
   const eslintOpt = {
     envs: [
@@ -56,19 +55,6 @@ module.exports = function exports(grunt) {
         src: ['Gruntfile.js', 'config/**/*.js']
       },
       tests: {
-        options: extend(
-          true,
-          {},
-          eslintOpt,
-          {
-            rules: {
-              'func-names': 0,
-              'new-cap': 0,
-              'no-unused-expressions': 0,
-              'no-wrap-func': 0
-            }
-          }
-        ),
         src: ['test/**/*.js']
       }
     },
