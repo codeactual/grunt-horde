@@ -101,6 +101,7 @@ Now `initConfig.eslint` contains both `src` (from `./node_modules/my-base-config
 ### Development
 
 - [API](docs/GruntHorde.md)
+- [Notes](docs/development.md)
 
 ## License
 
